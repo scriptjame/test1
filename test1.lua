@@ -42,7 +42,7 @@ local backgroundFrame = Instance.new("Frame", hubGui)
 backgroundFrame.Size = UDim2.new(1, -40, 0.78, 0)
 backgroundFrame.Position = UDim2.new(0, 20, 0.06, 0)
 backgroundFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-backgroundFrame.BackgroundTransparency = 0.3
+backgroundFrame.BackgroundTransparency = 1 -- fade-in start
 backgroundFrame.BorderSizePixel = 0
 Instance.new("UICorner", backgroundFrame).CornerRadius = UDim.new(0,12)
 
@@ -72,6 +72,11 @@ infoLabel.TextStrokeTransparency = 0.5
 infoLabel.TextXAlignment = Enum.TextXAlignment.Center
 infoLabel.TextYAlignment = Enum.TextYAlignment.Center
 infoLabel.ZIndex = 10
+infoLabel.TextTransparency = 1 -- fade-in start
+
+-- Fade-in animation for background and infoLabel
+TweenService:Create(backgroundFrame, TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {BackgroundTransparency = 0.3}):Play()
+TweenService:Create(infoLabel, TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {TextTransparency = 0}):Play()
 
 -- loading helper
 local function showLoading(durationSeconds, onDone)
@@ -284,6 +289,7 @@ local games = {
 for _, info in ipairs(games) do
     local card = Instance.new("Frame", container)
     card.BackgroundColor3 = Color3.fromRGB(24,24,24)
+    card.BackgroundTransparency = 1 -- fade-in start
     Instance.new("UICorner", card).CornerRadius = UDim.new(0,10)
 
     local img = Instance.new("ImageButton", card)
@@ -326,6 +332,19 @@ for _, info in ipairs(games) do
     card.MouseLeave:Connect(function()
         TweenService:Create(card, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size = originalSize}):Play()
     end)
+end
+
+-- 🎯 Fade-in từng card theo thứ tự (staggered)
+local cardIndex = 0
+for _, obj in ipairs(container:GetChildren()) do
+    if obj:IsA("Frame") then
+        cardIndex += 1
+        local card = obj
+        task.spawn(function()
+            task.wait(0.05 * (cardIndex-1)) -- delay nhỏ giữa các card
+            TweenService:Create(card, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {BackgroundTransparency = 0}):Play()
+        end)
+    end
 end
 
 -- Nút ẩn/hiện hub
