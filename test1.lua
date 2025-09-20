@@ -245,8 +245,7 @@ local function openBladeBallMenu()
         end)
     end
 
-    -- thay Argon Hub X bằng Script Makzinn
-    createScriptBtn("Script Makzinn", "https://raw.githubusercontent.com/MagoKazinn/Makzinn_hub/main/makzinn_Hub")
+    createScriptBtn("Argon Hub X", "https://raw.githubusercontent.com/AgentX771/ArgonHubX/main/Loader.lua")
     createScriptBtn("Sinaloa Hub", "https://api.luarmor.net/files/v3/loaders/63e751ce9ac5e9bcb4e7246c9775af78.lua")
     createScriptBtn("RX Hub", "https://raw.githubusercontent.com/NodeX-Enc/NodeX/refs/heads/main/Main.lua")
     createScriptBtn("Allusive", nil, "premium")
@@ -333,7 +332,37 @@ for _, info in ipairs(games) do
     card.MouseLeave:Connect(function()
         TweenService:Create(card, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size = originalSize}):Play()
     end)
-
-    -- fade-in cards
-    TweenService:Create(card, TweenInfo.new(0.8, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {BackgroundTransparency = 0}):Play()
 end
+
+-- 🎯 Fade-in từng card theo thứ tự (staggered)
+local cardIndex = 0
+for _, obj in ipairs(container:GetChildren()) do
+    if obj:IsA("Frame") then
+        cardIndex += 1
+        local card = obj
+        task.spawn(function()
+            task.wait(0.05 * (cardIndex-1)) -- delay nhỏ giữa các card
+            TweenService:Create(card, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {BackgroundTransparency = 0}):Play()
+        end)
+    end
+end
+
+-- Nút ẩn/hiện hub
+local toggleBtn = Instance.new("TextButton", hubGui)
+toggleBtn.Size = UDim2.new(0,40,0,40)
+toggleBtn.Position = UDim2.new(0, 10, 1, -80)
+toggleBtn.BackgroundColor3 = Color3.fromRGB(60,60,60)
+toggleBtn.Text = "≡"
+toggleBtn.Font = Enum.Font.GothamBold
+toggleBtn.TextSize = 20
+toggleBtn.TextColor3 = Color3.fromRGB(255,255,255)
+toggleBtn.ZIndex = 100
+Instance.new("UICorner", toggleBtn).CornerRadius = UDim.new(1,0)
+
+local toggleVisible = true
+toggleBtn.MouseButton1Click:Connect(function()
+    toggleVisible = not toggleVisible
+    TweenService:Create(container, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Position = toggleVisible and UDim2.new(0,0,0,0) or UDim2.new(-1,0,0,0)}):Play()
+    TweenService:Create(backgroundFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Position = toggleVisible and UDim2.new(0,20,0.06,0) or UDim2.new(-1,20,0.06,0)}):Play()
+    TweenService:Create(infoLabel, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Position = toggleVisible and UDim2.new(0.2,0,0.6,0) or UDim2.new(-1,0,0.6,0)}):Play()
+end)
