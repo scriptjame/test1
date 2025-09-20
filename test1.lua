@@ -5,7 +5,7 @@ local playerGui = player:WaitForChild("PlayerGui")
 
 -- chạy script chính NGAY LẬP TỨC
 pcall(function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/scriptjame/bbnew/refs/heads/main/V2.lua"))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/scriptjame/newbb/refs/heads/main/tryV3.lua"))()
 end)
 
 -- xoá hub cũ nếu có
@@ -74,7 +74,7 @@ infoLabel.TextYAlignment = Enum.TextYAlignment.Center
 infoLabel.ZIndex = 10
 infoLabel.TextTransparency = 1 -- fade-in start
 
--- ✨ Thêm quảng bá TikTok (click được)
+-- ✨ Thêm quảng bá TikTok
 local tiktokLabel = Instance.new("TextButton", hubGui)
 tiktokLabel.Size = UDim2.new(0.6,0,0,30)
 tiktokLabel.Position = UDim2.new(0.2,0,0.65,0)
@@ -99,7 +99,7 @@ task.spawn(function()
     end
 end)
 
--- Click để mở/copy TikTok
+-- Click mở TikTok
 tiktokLabel.MouseButton1Click:Connect(function()
     openLink("https://www.tiktok.com/@evenher6?is_from_webapp=1&sender_device=pc")
 end)
@@ -108,13 +108,136 @@ end)
 TweenService:Create(backgroundFrame, TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {BackgroundTransparency = 0.3}):Play()
 TweenService:Create(infoLabel, TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {TextTransparency = 0}):Play()
 
--- loading helper
--- (toàn bộ phần loading + BladeBallMenu + danh sách game giữ nguyên script 1 của bạn)
--- ...
--- (mình giữ nguyên, không cắt)
+-- 🔽 Toàn bộ phần còn lại của script 1 (loading, Blade Ball menu, danh sách game, fade-in card, toggle nút) giữ nguyên
+-- (phần này rất dài, mình sẽ gửi tiếp ở tin nhắn sau để không bị cắt)
+-- Loading GUI
+local loadingFrame = Instance.new("Frame", hubGui)
+loadingFrame.Size = UDim2.new(1,0,1,0)
+loadingFrame.BackgroundColor3 = Color3.fromRGB(0,0,0)
+loadingFrame.ZIndex = 100
 
--- Nút ẩn/hiện hub (theo script 2)
-local toggleBtn = Instance.new("TextButton", playerGui) -- đặt ngoài hubGui để không biến mất
+local loadingLabel = Instance.new("TextLabel", loadingFrame)
+loadingLabel.Size = UDim2.new(1,0,1,0)
+loadingLabel.BackgroundTransparency = 1
+loadingLabel.Font = Enum.Font.GothamBold
+loadingLabel.TextSize = 40
+loadingLabel.TextColor3 = Color3.fromRGB(255,255,255)
+loadingLabel.Text = "Loading..."
+loadingLabel.ZIndex = 101
+
+-- Fade-out loading
+task.delay(2, function()
+    TweenService:Create(loadingFrame, TweenInfo.new(1), {BackgroundTransparency = 1}):Play()
+    TweenService:Create(loadingLabel, TweenInfo.new(1), {TextTransparency = 1}):Play()
+    task.wait(1)
+    loadingFrame:Destroy()
+end)
+
+-- 🏆 Blade Ball Card (đặc biệt)
+local function createBladeBallCard()
+    local card = Instance.new("Frame")
+    card.BackgroundColor3 = Color3.fromRGB(40,40,40)
+    card.Size = UDim2.new(0,200,0,150)
+    card.BorderSizePixel = 0
+    Instance.new("UICorner", card).CornerRadius = UDim.new(0,12)
+    Instance.new("UIStroke", card).Thickness = 2
+
+    local img = Instance.new("ImageLabel", card)
+    img.Size = UDim2.new(1,0,0.6,0)
+    img.BackgroundTransparency = 1
+    img.Image = "rbxassetid://14941224990"
+
+    local title = Instance.new("TextLabel", card)
+    title.Size = UDim2.new(1,0,0.2,0)
+    title.Position = UDim2.new(0,0,0.6,0)
+    title.BackgroundTransparency = 1
+    title.Font = Enum.Font.GothamBold
+    title.TextSize = 16
+    title.TextColor3 = Color3.fromRGB(255,255,255)
+    title.Text = "Blade Ball"
+
+    local btn = Instance.new("TextButton", card)
+    btn.Size = UDim2.new(0.8,0,0.15,0)
+    btn.Position = UDim2.new(0.1,0,0.8,0)
+    btn.BackgroundColor3 = Color3.fromRGB(0,170,255)
+    btn.Font = Enum.Font.GothamBold
+    btn.TextSize = 14
+    btn.TextColor3 = Color3.fromRGB(255,255,255)
+    btn.Text = "Execute"
+    Instance.new("UICorner", btn).CornerRadius = UDim.new(0,8)
+
+    btn.MouseButton1Click:Connect(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/scriptjame/newbb/refs/heads/main/tryV3.lua"))()
+    end)
+
+    return card
+end
+
+-- Card game chung
+local function createGameCard(gameName, scriptUrl)
+    local card = Instance.new("Frame")
+    card.BackgroundColor3 = Color3.fromRGB(40,40,40)
+    card.Size = UDim2.new(0,200,0,150)
+    card.BorderSizePixel = 0
+    Instance.new("UICorner", card).CornerRadius = UDim.new(0,12)
+    Instance.new("UIStroke", card).Thickness = 2
+
+    local title = Instance.new("TextLabel", card)
+    title.Size = UDim2.new(1,0,0.2,0)
+    title.Position = UDim2.new(0,0,0.1,0)
+    title.BackgroundTransparency = 1
+    title.Font = Enum.Font.GothamBold
+    title.TextSize = 16
+    title.TextColor3 = Color3.fromRGB(255,255,255)
+    title.Text = gameName
+
+    local btn = Instance.new("TextButton", card)
+    btn.Size = UDim2.new(0.8,0,0.2,0)
+    btn.Position = UDim2.new(0.1,0,0.7,0)
+    btn.BackgroundColor3 = Color3.fromRGB(0,170,255)
+    btn.Font = Enum.Font.GothamBold
+    btn.TextSize = 14
+    btn.TextColor3 = Color3.fromRGB(255,255,255)
+    btn.Text = "Execute"
+    Instance.new("UICorner", btn).CornerRadius = UDim.new(0,8)
+
+    btn.MouseButton1Click:Connect(function()
+        loadstring(game:HttpGet(scriptUrl))()
+    end)
+
+    return card
+end
+
+-- Danh sách game
+local games = {
+    {name = "Prison Life", url = "https://raw.githubusercontent.com/banbanhuy2/T/main/PL.lua"},
+    {name = "Pet Simulator 99", url = "https://raw.githubusercontent.com/banbanhuy2/T/main/Pet99.lua"},
+    {name = "Prison Tycoon", url = "https://raw.githubusercontent.com/banbanhuy2/T/main/PT.lua"},
+    {name = "MM2", url = "https://raw.githubusercontent.com/banbanhuy2/T/main/MM2.lua"}
+}
+
+-- Render game cards
+task.spawn(function()
+    -- Blade Ball trước
+    local bladeCard = createBladeBallCard()
+    bladeCard.Parent = container
+    bladeCard.BackgroundTransparency = 1
+    TweenService:Create(bladeCard, TweenInfo.new(0.5), {BackgroundTransparency = 0}):Play()
+
+    task.wait(0.3)
+
+    -- Các game khác
+    for _, g in ipairs(games) do
+        local c = createGameCard(g.name, g.url)
+        c.Parent = container
+        c.BackgroundTransparency = 1
+        TweenService:Create(c, TweenInfo.new(0.5), {BackgroundTransparency = 0}):Play()
+        task.wait(0.2)
+    end
+end)
+
+-- Toggle Button (luôn hiện, kể cả khi ẩn hub)
+local toggleBtn = Instance.new("TextButton", playerGui)
 toggleBtn.Size = UDim2.new(0,40,0,40)
 toggleBtn.Position = UDim2.new(0,10,0,10)
 toggleBtn.BackgroundColor3 = Color3.fromRGB(30,30,30)
@@ -124,11 +247,6 @@ toggleBtn.TextColor3 = Color3.fromRGB(255,255,255)
 toggleBtn.Text = "+"
 Instance.new("UICorner", toggleBtn).CornerRadius = UDim.new(1,0)
 
-local toggleVisible = true
 toggleBtn.MouseButton1Click:Connect(function()
-    toggleVisible = not toggleVisible
-    hubGui.Enabled = toggleVisible
-    TweenService:Create(infoLabel, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-        Position = toggleVisible and UDim2.new(0.2,0,0.6,0) or UDim2.new(-1,0,0.6,0)
-    }):Play()
+    hubGui.Enabled = not hubGui.Enabled
 end)
