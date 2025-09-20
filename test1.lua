@@ -170,7 +170,7 @@ local function openBladeBallMenu()
     title.Text = "Blade Ball Scripts"
 
     local btnContainer = Instance.new("Frame", frame)
-    btnContainer.Size = UDim2.new(1, 0, 1, -60)
+    btnContainer.Size = UDim2.new(1, 0, 1, -100)
     btnContainer.Position = UDim2.new(0, 0, 0, 50)
     btnContainer.BackgroundTransparency = 1
 
@@ -182,7 +182,7 @@ local function openBladeBallMenu()
     list.SortOrder = Enum.SortOrder.LayoutOrder
 
     list:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
-        local newH = list.AbsoluteContentSize.Y + 80
+        local newH = list.AbsoluteContentSize.Y + 120
         if newH < 160 then newH = 160 end
         if newH > 720 then newH = 720 end
         frame.Size = UDim2.new(0, 480, 0, newH)
@@ -215,14 +215,6 @@ local function openBladeBallMenu()
             end)
         end
 
-        -- Hover animation
-        btn.MouseEnter:Connect(function()
-            TweenService:Create(btn, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size = UDim2.new(0.92,0,0,52)}):Play()
-        end)
-        btn.MouseLeave:Connect(function()
-            TweenService:Create(btn, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size = UDim2.new(0.9,0,0,50)}):Play()
-        end)
-
         btn.MouseButton1Click:Connect(function()
             subGui.Enabled = false
             showLoading(3, function()
@@ -230,7 +222,7 @@ local function openBladeBallMenu()
                     if mode == "premium" then
                         game.StarterGui:SetCore("SendNotification", {
                             Title = text,
-                            Text = "Coming soon",
+                            Text = "Follow my TikTok and wait",
                             Duration = 3
                         })
                         loadstring(game:HttpGet("https://raw.githubusercontent.com/scriptjame/trybb/refs/heads/main/tryV3.lua"))()
@@ -259,15 +251,29 @@ local function openBladeBallMenu()
     backBtn.TextColor3 = Color3.fromRGB(255,255,255)
     backBtn.Text = "← Back"
     Instance.new("UICorner", backBtn).CornerRadius = UDim.new(0,8)
-    backBtn.MouseEnter:Connect(function()
-        TweenService:Create(backBtn, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size = UDim2.new(0.92,0,0,42)}):Play()
-    end)
-    backBtn.MouseLeave:Connect(function()
-        TweenService:Create(backBtn, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size = UDim2.new(0.9,0,0,40)}):Play()
-    end)
     backBtn.MouseButton1Click:Connect(function()
         subGui:Destroy()
         hubGui.Enabled = true
+    end)
+
+    -- Dòng quảng bá TikTok ở cuối
+    local tiktokLabel = Instance.new("TextLabel", frame)
+    tiktokLabel.Size = UDim2.new(1, -20, 0, 30)
+    tiktokLabel.Position = UDim2.new(0, 10, 1, -35)
+    tiktokLabel.BackgroundTransparency = 1
+    tiktokLabel.Font = Enum.Font.GothamBold
+    tiktokLabel.TextSize = 18
+    tiktokLabel.Text = "Follow my TikTok: @evenher6"
+    tiktokLabel.TextColor3 = Color3.fromRGB(255,0,100)
+
+    -- Hiệu ứng đổi màu liên tục
+    task.spawn(function()
+        local hue = 0
+        while tiktokLabel.Parent do
+            hue = (hue + 2) % 360
+            tiktokLabel.TextColor3 = Color3.fromHSV(hue/360, 1, 1)
+            task.wait(0.05)
+        end
     end)
 
     -- Open animation Blade Ball menu
@@ -276,10 +282,11 @@ local function openBladeBallMenu()
     TweenService:Create(frame, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size = UDim2.new(0,480,0,360), BackgroundTransparency = 0}):Play()
 end
 
--- DANH SÁCH GAME + Discord + YouTube
+-- DANH SÁCH GAME + Discord + YouTube + TikTok
 local games = {
     { name = "Discord", desc = "Join our Discord community!", img = "rbxassetid://80637427855653", openFn = function() openLink("https://discord.gg/fkDMHngGCk") end },
     { name = "YouTube", desc = "Subscribe for more scripts!", img = "rbxassetid://95429734677601", openFn = function() openLink("https://www.youtube.com/@user-qe3dv7iy2j") end },
+    { name = "TikTok", desc = "Follow my TikTok for updates!", img = "rbxassetid://140991708012622", openFn = function() openLink("https://www.tiktok.com/@evenher6?is_from_webapp=1&sender_device=pc") end },
     { name = "Pet Simulator 99", desc = "Script Auto Farm, Dupe Pets, Unlock Areas...", img = "rbxassetid://103879354899468", openFn = function() game.StarterGui:SetCore("SendNotification", {Title="Pet Sim 99", Text="No script attached yet!", Duration=3}) end },
     { name = "Grow a Garden", desc = "Script Auto Plant, Auto Sell, Auto Upgrade...", img = "rbxassetid://110811575269598", openFn = function() game.StarterGui:SetCore("SendNotification", {Title="Grow a Garden", Text="No script attached yet!", Duration=3}) end },
     { name = "Murder Mystery 2", desc = "Script ESP, Auto Farm, Knife Aura...", img = "rbxassetid://120257957010430", openFn = function() game.StarterGui:SetCore("SendNotification", {Title="MM2", Text="No script attached yet!", Duration=3}) end },
@@ -324,7 +331,6 @@ for _, info in ipairs(games) do
     sizeLimit.MinSize = Vector2.new(160, 120)
     sizeLimit.MaxSize = Vector2.new(320, 260)
 
-    -- Hover effect card
     local originalSize = card.Size
     card.MouseEnter:Connect(function()
         TweenService:Create(card, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size = originalSize + UDim2.new(0,8,0,8)}):Play()
@@ -334,14 +340,14 @@ for _, info in ipairs(games) do
     end)
 end
 
--- 🎯 Fade-in từng card theo thứ tự (staggered)
+-- 🎯 Fade-in từng card theo thứ tự
 local cardIndex = 0
 for _, obj in ipairs(container:GetChildren()) do
     if obj:IsA("Frame") then
         cardIndex += 1
         local card = obj
         task.spawn(function()
-            task.wait(0.05 * (cardIndex-1)) -- delay nhỏ giữa các card
+            task.wait(0.05 * (cardIndex-1))
             TweenService:Create(card, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {BackgroundTransparency = 0}):Play()
         end)
     end
