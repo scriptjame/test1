@@ -72,6 +72,62 @@ infoLabel.TextTransparency = 1
 TweenService:Create(backgroundFrame, TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {BackgroundTransparency = 0.3}):Play()
 TweenService:Create(infoLabel, TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {TextTransparency = 0}):Play()
 
+-- loading helper
+local function showLoading(durationSeconds, onDone)
+    durationSeconds = durationSeconds or 5
+    local gui = Instance.new("ScreenGui", playerGui)
+    gui.Name = "Hub_LoadingGui"
+    gui.ResetOnSpawn = false
+
+    local frame = Instance.new("Frame", gui)
+    frame.Size = UDim2.new(0.46, 0, 0.14, 0)
+    frame.Position = UDim2.new(0.27, 0, 0.42, 0)
+    frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+    frame.BorderSizePixel = 0
+    Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 10)
+
+    local stroke = Instance.new("UIStroke", frame)
+    stroke.Color = Color3.fromRGB(120, 120, 255)
+    stroke.Thickness = 2
+
+    local title = Instance.new("TextLabel", frame)
+    title.Size = UDim2.new(1, -20, 0, 45)
+    title.Position = UDim2.new(0, 10, 0, 8)
+    title.BackgroundTransparency = 1
+    title.Font = Enum.Font.GothamBold
+    title.TextSize = 20
+    title.TextColor3 = Color3.fromRGB(255,255,255)
+    title.Text = "Preparing script..."
+    title.TextXAlignment = Enum.TextXAlignment.Center
+
+    local barBG = Instance.new("Frame", frame)
+    barBG.Size = UDim2.new(0.9, 0, 0.28, 0)
+    barBG.Position = UDim2.new(0.05, 0, 0.55, 0)
+    barBG.BackgroundColor3 = Color3.fromRGB(45,45,45)
+    barBG.BorderSizePixel = 0
+    Instance.new("UICorner", barBG).CornerRadius = UDim.new(0, 8)
+
+    local bar = Instance.new("Frame", barBG)
+    bar.Size = UDim2.new(0, 0, 1, 0)
+    bar.BackgroundColor3 = Color3.fromRGB(120, 120, 255)
+    Instance.new("UICorner", bar).CornerRadius = UDim.new(0, 8)
+
+    local phrases = { "Injecting magic modules...", "Optimizing local hooks...", "Calibrating anti-miss...", "Loading GUI components...", "Almost ready — hold on..." }
+
+    local steps = 100
+    local stepTime = durationSeconds / steps
+    task.spawn(function()
+        for i = 1, steps do
+            local pct = i/steps
+            bar:TweenSize(UDim2.new(pct,0,1,0), Enum.EasingDirection.InOut, Enum.EasingStyle.Quad, stepTime, true)
+            title.Text = phrases[math.random(1, #phrases)]
+            task.wait(stepTime)
+        end
+        gui:Destroy()
+        if onDone then onDone() end
+    end)
+end
+
 -- Blade Ball menu phụ
 local function openBladeBallMenu()
     hubGui.Enabled = false
@@ -157,7 +213,7 @@ local function openBladeBallMenu()
         btn.MouseButton1Click:Connect(function()
             subGui.Enabled = false
             if not skipLoading then
-                task.spawn(function()
+                showLoading(3, function()
                     local ok, err = pcall(function()
                         if mode == "premium" then
                             game.StarterGui:SetCore("SendNotification", {
@@ -190,7 +246,7 @@ local function openBladeBallMenu()
     createScriptBtn("RX Hub", "https://raw.githubusercontent.com/NodeX-Enc/NodeX/refs/heads/main/Main.lua")
     createScriptBtn("Allusive", nil, "premium")
     createScriptBtn("UwU", nil, "premium")
-    createScriptBtn("Follow my TikTok @evenher6", nil, "premium", Color3.fromRGB(255, 105, 180), true) -- nút mới, màu hồng neon, không loading
+    createScriptBtn("Follow my TikTok @evenher6", nil, "premium", Color3.fromRGB(255, 105, 180), true) -- **màu hồng neon, không loading**
 
     -- Back button
     local backBtn = Instance.new("TextButton", btnContainer)
