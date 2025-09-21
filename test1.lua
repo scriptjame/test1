@@ -75,7 +75,7 @@ TweenService:Create(infoLabel, TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.Ea
 -- Quảng bá TikTok clickable dưới infoLabel
 local tiktokPromo = Instance.new("TextButton", hubGui)
 tiktokPromo.Size = UDim2.new(0.6,0,0,26)
-tiktokPromo.Position = UDim2.new(0.2,0,0.65,0)
+tiktokPromo.Position = UDim2.new(0.2,0,0.58,0)
 tiktokPromo.BackgroundTransparency = 1
 tiktokPromo.Font = Enum.Font.GothamBold
 tiktokPromo.TextSize = 16
