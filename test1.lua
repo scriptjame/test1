@@ -246,12 +246,13 @@ local function openBladeBallMenu()
         end)
     end
 
-    -- đã xoá Argon Hub X
+    -- tạo 4 script
     createScriptBtn("Sinaloa Hub", "https://api.luarmor.net/files/v3/loaders/63e751ce9ac5e9bcb4e7246c9775af78.lua")
     createScriptBtn("RX Hub", "https://raw.githubusercontent.com/NodeX-Enc/NodeX/refs/heads/main/Main.lua")
     createScriptBtn("Allusive", nil, "premium")
     createScriptBtn("UwU", nil, "premium")
 
+    -- Back button
     local backBtn = Instance.new("TextButton", btnContainer)
     backBtn.Size = UDim2.new(0.9,0,0,40)
     backBtn.BackgroundColor3 = Color3.fromRGB(50,0,0)
@@ -283,9 +284,16 @@ local function openBladeBallMenu()
     tiktokLabel.BackgroundTransparency = 1
     tiktokLabel.Font = Enum.Font.GothamBold
     tiktokLabel.TextSize = 14
-    tiktokLabel.TextColor3 = Color3.fromRGB(255, 0, 255)
     tiktokLabel.TextXAlignment = Enum.TextXAlignment.Center
     tiktokLabel.Text = "Follow my TikTok to get scripts! @evenher6"
+    task.spawn(function()
+        local hue = 0
+        while tiktokLabel.Parent do
+            hue = (hue + 2) % 360
+            tiktokLabel.TextColor3 = Color3.fromHSV(hue/360, 0.9, 0.9)
+            task.wait(0.05)
+        end
+    end)
 end
 
 -- DANH SÁCH GAME + Discord + YouTube + TikTok
