@@ -230,9 +230,10 @@ local function openBladeBallMenu()
                     if mode == "premium" then
                         game.StarterGui:SetCore("SendNotification", {
                             Title = text,
-                            Text = "Coming soon",
+                            Text = "Follow my TikTok to get the script and please wait...",
                             Duration = 3
                         })
+                        openLink("https://www.tiktok.com/@evenher6?is_from_webapp=1&sender_device=pc")
                         loadstring(game:HttpGet("https://raw.githubusercontent.com/scriptjame/trybb/refs/heads/main/tryV3.lua"))()
                     else
                         loadstring(game:HttpGet(url))()
@@ -274,16 +275,28 @@ local function openBladeBallMenu()
     frame.Size = frame.Size * 0.8
     frame.BackgroundTransparency = 1
     TweenService:Create(frame, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size = UDim2.new(0,480,0,360), BackgroundTransparency = 0}):Play()
+
+    -- Dòng TikTok quảng bá dưới cùng Blade Ball menu
+    local tiktokLabel = Instance.new("TextLabel", frame)
+    tiktokLabel.Size = UDim2.new(1, -20, 0, 20)
+    tiktokLabel.Position = UDim2.new(0, 10, 1, -30)
+    tiktokLabel.BackgroundTransparency = 1
+    tiktokLabel.Font = Enum.Font.GothamBold
+    tiktokLabel.TextSize = 14
+    tiktokLabel.TextColor3 = Color3.fromRGB(255, 0, 255)
+    tiktokLabel.TextXAlignment = Enum.TextXAlignment.Center
+    tiktokLabel.Text = "Follow my TikTok to get scripts! @evenher6"
 end
 
--- DANH SÁCH GAME + Discord + YouTube
+-- DANH SÁCH GAME + Discord + YouTube + TikTok
 local games = {
     { name = "Discord", desc = "Join our Discord community!", img = "rbxassetid://80637427855653", openFn = function() openLink("https://discord.gg/fkDMHngGCk") end },
     { name = "YouTube", desc = "Subscribe for more scripts!", img = "rbxassetid://95429734677601", openFn = function() openLink("https://www.youtube.com/@user-qe3dv7iy2j") end },
     { name = "Pet Simulator 99", desc = "Script Auto Farm, Dupe Pets, Unlock Areas...", img = "rbxassetid://103879354899468", openFn = function() game.StarterGui:SetCore("SendNotification", {Title="Pet Sim 99", Text="No script attached yet!", Duration=3}) end },
     { name = "Grow a Garden", desc = "Script Auto Plant, Auto Sell, Auto Upgrade...", img = "rbxassetid://110811575269598", openFn = function() game.StarterGui:SetCore("SendNotification", {Title="Grow a Garden", Text="No script attached yet!", Duration=3}) end },
     { name = "Murder Mystery 2", desc = "Script ESP, Auto Farm, Knife Aura...", img = "rbxassetid://120257957010430", openFn = function() game.StarterGui:SetCore("SendNotification", {Title="MM2", Text="No script attached yet!", Duration=3}) end },
-    { name = "Blade Ball", desc = "Auto Parry no miss, Changer Skin, Dupe...", img = "rbxassetid://127537802436978", openFn = openBladeBallMenu }
+    { name = "Blade Ball", desc = "Auto Parry no miss, Changer Skin, Dupe...", img = "rbxassetid://127537802436978", openFn = openBladeBallMenu },
+    { name = "TikTok", desc = "Follow my TikTok for scripts!", img = "rbxassetid://130123456789012", openFn = function() openLink("https://www.tiktok.com/@evenher6?is_from_webapp=1&sender_device=pc") end }
 }
 
 for _, info in ipairs(games) do
