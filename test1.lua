@@ -21,14 +21,8 @@ hubGui.IgnoreGuiInset = true
 -- helper mở link / copy
 local function openLink(url)
     local copied = false
-    if setclipboard then
-        pcall(setclipboard, url)
-        copied = true
-    end
-    if type(openbrowser) == "function" then
-        pcall(openbrowser, url)
-        copied = true
-    end
+    if setclipboard then pcall(setclipboard, url) copied = true end
+    if type(openbrowser) == "function" then pcall(openbrowser, url) copied = true end
     game.StarterGui:SetCore("SendNotification", {
         Title = "Link",
         Text = copied and "Link copied!" or "Copy manually: "..url,
@@ -42,7 +36,7 @@ local backgroundFrame = Instance.new("Frame", hubGui)
 backgroundFrame.Size = UDim2.new(1, -40, 0.78, 0)
 backgroundFrame.Position = UDim2.new(0, 20, 0.06, 0)
 backgroundFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-backgroundFrame.BackgroundTransparency = 1 -- fade-in start
+backgroundFrame.BackgroundTransparency = 1
 backgroundFrame.BorderSizePixel = 0
 Instance.new("UICorner", backgroundFrame).CornerRadius = UDim.new(0,12)
 
@@ -72,7 +66,7 @@ infoLabel.TextStrokeTransparency = 0.5
 infoLabel.TextXAlignment = Enum.TextXAlignment.Center
 infoLabel.TextYAlignment = Enum.TextYAlignment.Center
 infoLabel.ZIndex = 10
-infoLabel.TextTransparency = 1 -- fade-in start
+infoLabel.TextTransparency = 1
 
 -- Fade-in animation for background and infoLabel
 TweenService:Create(backgroundFrame, TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {BackgroundTransparency = 0.3}):Play()
@@ -97,7 +91,7 @@ local function showLoading(durationSeconds, onDone)
     stroke.Thickness = 2
 
     local title = Instance.new("TextLabel", frame)
-    title.Size = UDim2.new(1, -20, 0.45, 0)
+    title.Size = UDim2.new(1, -20, 0, 45)
     title.Position = UDim2.new(0, 10, 0, 8)
     title.BackgroundTransparency = 1
     title.Font = Enum.Font.GothamBold
@@ -118,16 +112,10 @@ local function showLoading(durationSeconds, onDone)
     bar.BackgroundColor3 = Color3.fromRGB(120, 120, 255)
     Instance.new("UICorner", bar).CornerRadius = UDim.new(0, 8)
 
-    local phrases = {
-        "Injecting magic modules...",
-        "Optimizing local hooks...",
-        "Calibrating anti-miss...",
-        "Loading GUI components...",
-        "Almost ready — hold on..."
-    }
+    local phrases = { "Injecting magic modules...", "Optimizing local hooks...", "Calibrating anti-miss...", "Loading GUI components...", "Almost ready — hold on..." }
+
     local steps = 100
     local stepTime = durationSeconds / steps
-
     task.spawn(function()
         for i = 1, steps do
             local pct = i/steps
@@ -199,7 +187,6 @@ local function openBladeBallMenu()
         btn.TextColor3 = Color3.fromRGB(255,255,255)
         btn.Text = "Script - "..text
         Instance.new("UICorner", btn).CornerRadius = UDim.new(0,8)
-
         local strokeBtn = Instance.new("UIStroke", btn)
         strokeBtn.Color = Color3.fromRGB(180,180,180)
         strokeBtn.Thickness = 1
@@ -246,11 +233,12 @@ local function openBladeBallMenu()
         end)
     end
 
-    -- tạo 4 script
+    -- tạo 4 script + nút mới ngay dưới Allusive & UwU
     createScriptBtn("Sinaloa Hub", "https://api.luarmor.net/files/v3/loaders/63e751ce9ac5e9bcb4e7246c9775af78.lua")
     createScriptBtn("RX Hub", "https://raw.githubusercontent.com/NodeX-Enc/NodeX/refs/heads/main/Main.lua")
     createScriptBtn("Allusive", nil, "premium")
     createScriptBtn("UwU", nil, "premium")
+    createScriptBtn("✨ New Script ✨", nil, "premium") -- nút mới, chuyển động màu sắc
 
     -- Back button
     local backBtn = Instance.new("TextButton", btnContainer)
@@ -261,6 +249,7 @@ local function openBladeBallMenu()
     backBtn.TextColor3 = Color3.fromRGB(255,255,255)
     backBtn.Text = "← Back"
     Instance.new("UICorner", backBtn).CornerRadius = UDim.new(0,8)
+
     backBtn.MouseEnter:Connect(function()
         TweenService:Create(backBtn, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size = UDim2.new(0.92,0,0,42)}):Play()
     end)
@@ -310,7 +299,7 @@ local games = {
 for _, info in ipairs(games) do
     local card = Instance.new("Frame", container)
     card.BackgroundColor3 = Color3.fromRGB(24,24,24)
-    card.BackgroundTransparency = 1 -- fade-in start
+    card.BackgroundTransparency = 1
     Instance.new("UICorner", card).CornerRadius = UDim.new(0,10)
 
     local img = Instance.new("ImageButton", card)
@@ -345,7 +334,7 @@ for _, info in ipairs(games) do
     sizeLimit.MinSize = Vector2.new(160, 120)
     sizeLimit.MaxSize = Vector2.new(320, 260)
 
-    -- Hover effect card
+    -- Hover effect
     local originalSize = card.Size
     card.MouseEnter:Connect(function()
         TweenService:Create(card, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size = originalSize + UDim2.new(0,8,0,8)}):Play()
@@ -355,14 +344,14 @@ for _, info in ipairs(games) do
     end)
 end
 
--- 🎯 Fade-in từng card theo thứ tự (staggered)
+-- Fade-in từng card theo thứ tự
 local cardIndex = 0
 for _, obj in ipairs(container:GetChildren()) do
     if obj:IsA("Frame") then
         cardIndex += 1
         local card = obj
         task.spawn(function()
-            task.wait(0.05 * (cardIndex-1)) -- delay nhỏ giữa các card
+            task.wait(0.05 * (cardIndex-1))
             TweenService:Create(card, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {BackgroundTransparency = 0}):Play()
         end)
     end
