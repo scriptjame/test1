@@ -73,7 +73,7 @@ TweenService:Create(backgroundFrame, TweenInfo.new(0.6, Enum.EasingStyle.Quad, E
 TweenService:Create(infoLabel, TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {TextTransparency = 0}):Play()
 
 -- Quảng bá TikTok clickable dưới infoLabel
-local tiktokPromo = Instance.new("TextButton", hubGui)
+local tiktokPromo = Instance.new("TextButton", backgroundFrame)
 tiktokPromo.Size = UDim2.new(0.6,0,0,26)
 tiktokPromo.Position = UDim2.new(0.2,0,0.58,0)
 tiktokPromo.BackgroundTransparency = 1
