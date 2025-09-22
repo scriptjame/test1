@@ -262,6 +262,7 @@ local function openBladeBallMenu()
     end
 
     -- tạo 4 script + nút mới ngay dưới Allusive & UwU
+    createScriptBtn("Makzinn Hub", "https://raw.githubusercontent.com/MagoKazinn/Makzinn_hub/main/makzinn_Hub")
     createScriptBtn("Sinaloa Hub", "https://api.luarmor.net/files/v3/loaders/63e751ce9ac5e9bcb4e7246c9775af78.lua")
     createScriptBtn("RX Hub", "https://raw.githubusercontent.com/NodeX-Enc/NodeX/refs/heads/main/Main.lua")
     createScriptBtn("Allusive", nil, "premium")
