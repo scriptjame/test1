@@ -74,7 +74,7 @@ list.HorizontalAlignment = Enum.HorizontalAlignment.Center
 list.SortOrder = Enum.SortOrder.LayoutOrder
 
 -- Hàm tạo nút script
-local function createScriptBtn(text, url, premium)
+local function createScriptBtn(text, url, premium, copyTikTok)
     local btn = Instance.new("TextButton", scroll)
     btn.Size = UDim2.new(0.9, 0, 0, 45)
     btn.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
@@ -93,7 +93,7 @@ local function createScriptBtn(text, url, premium)
         TweenService:Create(btn, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(35, 35, 45)}):Play()
     end)
 
-    -- Premium rainbow
+    -- Rainbow cho premium
     if premium then
         task.spawn(function()
             local hue = 0
@@ -107,40 +107,50 @@ local function createScriptBtn(text, url, premium)
 
     -- Click
     btn.MouseButton1Click:Connect(function()
-        local ok, err = pcall(function()
-            if url then
-                -- Loading effect
-                local loading = Instance.new("TextLabel", frame)
-                loading.Size = UDim2.new(1, 0, 0, 30)
-                loading.Position = UDim2.new(0, 0, 0, frame.Size.Y.Offset - 35)
-                loading.BackgroundTransparency = 1
-                loading.Text = "Loading..."
-                loading.Font = Enum.Font.GothamBold
-                loading.TextSize = 18
-                loading.TextColor3 = Color3.fromRGB(255, 255, 0)
-                task.wait(3)
-                loading:Destroy()
-                loadstring(game:HttpGet(url))()
-            else
-                game.StarterGui:SetCore("SendNotification", {
-                    Title = "Premium",
-                    Text = "Follow my TikTok to get updates!",
-                    Duration = 5
-                })
-            end
-        end)
-        if not ok then warn("⚠️ Script lỗi:", err) end
+        if copyTikTok then
+            if setclipboard then setclipboard("https://www.tiktok.com/@evenher6?is_from_webapp=1&sender_device=pc") end
+            game.StarterGui:SetCore("SendNotification", {
+                Title = "Copied!",
+                Text = "TikTok link copied!",
+                Duration = 4
+            })
+        else
+            local ok, err = pcall(function()
+                if url then
+                    -- Loading effect
+                    local loading = Instance.new("TextLabel", frame)
+                    loading.Size = UDim2.new(1, 0, 0, 30)
+                    loading.Position = UDim2.new(0, 0, 0, frame.Size.Y.Offset - 35)
+                    loading.BackgroundTransparency = 1
+                    loading.Text = "Loading..."
+                    loading.Font = Enum.Font.GothamBold
+                    loading.TextSize = 18
+                    loading.TextColor3 = Color3.fromRGB(255, 255, 0)
+                    task.wait(3)
+                    loading:Destroy()
+                    loadstring(game:HttpGet(url))()
+                else
+                    game.StarterGui:SetCore("SendNotification", {
+                        Title = "Premium",
+                        Text = "Follow my TikTok to get updates!",
+                        Duration = 5
+                    })
+                end
+            end)
+            if not ok then warn("⚠️ Script error:", err) end
+        end
     end)
 
     scroll.CanvasSize = UDim2.new(0, 0, 0, list.AbsoluteContentSize.Y + 20)
 end
 
--- Scripts
+-- 🟢 Scripts (Makzinn Hub lên đầu)
+createScriptBtn("Makzinn Hub", "https://raw.githubusercontent.com/MagoKazinn/Makzinn_hub/main/makzinn_Hub")
 createScriptBtn("Argon Hub X", "https://raw.githubusercontent.com/AgentX771/ArgonHubX/main/Loader.lua")
 createScriptBtn("Sinaloa Hub", "https://api.luarmor.net/files/v3/loaders/63e751ce9ac5e9bcb4e7246c9775af78.lua")
 createScriptBtn("RX Hub", "https://raw.githubusercontent.com/NodeX-Enc/NodeX/refs/heads/main/Main.lua")
-createScriptBtn("Allusive", nil, true)
-createScriptBtn("UwU", nil, true)
+createScriptBtn("Allusive", nil, true, true) -- premium → copy TikTok
+createScriptBtn("UwU", nil, true, true)      -- premium → copy TikTok
 
 -- 🔥 Social buttons
 local socialFrame = Instance.new("Frame", frame)
