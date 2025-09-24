@@ -1,4 +1,4 @@
--- Blade Ball GUI phụ (hiện đại + auto resize + hiệu ứng + loading bar + social highlight)
+-- Blade Ball GUI phụ (hiện đại + auto resize + hiệu ứng)
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 local player = Players.LocalPlayer
@@ -46,7 +46,7 @@ end
 resizeFrame()
 workspace.CurrentCamera:GetPropertyChangedSignal("ViewportSize"):Connect(resizeFrame)
 
--- Title
+-- Tiêu đề
 local title = Instance.new("TextLabel", frame)
 title.Size = UDim2.new(1, -20, 0, 45)
 title.Position = UDim2.new(0, 10, 0, 5)
@@ -70,46 +70,23 @@ list.Padding = UDim.new(0, 8)
 list.HorizontalAlignment = Enum.HorizontalAlignment.Center
 list.SortOrder = Enum.SortOrder.LayoutOrder
 
--- Loading popup với progress bar
-local function showLoading(text, duration)
-    local popup = Instance.new("Frame", subGui)
-    popup.AnchorPoint = Vector2.new(0.5, 0.5)
-    popup.Position = UDim2.new(0.5, 0, 0.5, 0)
-    popup.Size = UDim2.new(0, 250, 0, 80)
-    popup.BackgroundColor3 = Color3.fromRGB(30, 30, 40)
-    Instance.new("UICorner", popup).CornerRadius = UDim.new(0, 10)
-
-    local label = Instance.new("TextLabel", popup)
-    label.Size = UDim2.new(1, 0, 0, 30)
-    label.Position = UDim2.new(0, 0, 0, 5)
-    label.BackgroundTransparency = 1
-    label.Font = Enum.Font.GothamBold
-    label.TextSize = 18
-    label.TextColor3 = Color3.fromRGB(255, 255, 255)
-    label.Text = text
-
-    local barBg = Instance.new("Frame", popup)
-    barBg.Size = UDim2.new(0.9, 0, 0, 15)
-    barBg.Position = UDim2.new(0.05, 0, 0.65, 0)
-    barBg.BackgroundColor3 = Color3.fromRGB(50, 50, 60)
-    barBg.BorderSizePixel = 0
-    Instance.new("UICorner", barBg).CornerRadius = UDim.new(0, 8)
-
-    local bar = Instance.new("Frame", barBg)
-    bar.Size = UDim2.new(0, 0, 1, 0)
-    bar.BackgroundColor3 = Color3.fromRGB(80, 200, 120)
-    bar.BorderSizePixel = 0
-    Instance.new("UICorner", bar).CornerRadius = UDim.new(0, 8)
-
-    TweenService:Create(bar, TweenInfo.new(duration), {Size = UDim2.new(1, 0, 1, 0)}):Play()
-
-    task.delay(duration, function()
-        popup:Destroy()
-    end)
+-- Hàm loading trước khi chạy script
+local function runWithLoading(url)
+    local loading = Instance.new("TextLabel", frame)
+    loading.Size = UDim2.new(1, -20, 0, 30)
+    loading.Position = UDim2.new(0, 10, 1, -40)
+    loading.BackgroundTransparency = 1
+    loading.Font = Enum.Font.Gotham
+    loading.TextSize = 16
+    loading.TextColor3 = Color3.fromRGB(200, 200, 255)
+    loading.Text = "⏳ Loading..."
+    task.wait(3)
+    loading:Destroy()
+    loadstring(game:HttpGet(url))()
 end
 
--- Button tạo
-local function createScriptBtn(text, url, premium, social, delayLoad)
+-- Hàm tạo nút script
+local function createScriptBtn(text, url, premium, socialType)
     local btn = Instance.new("TextButton", scroll)
     btn.Size = UDim2.new(0.9, 0, 0, 45)
     btn.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
@@ -128,8 +105,8 @@ local function createScriptBtn(text, url, premium, social, delayLoad)
         TweenService:Create(btn, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(35, 35, 45)}):Play()
     end)
 
-    -- Premium rainbow
-    if premium then
+    -- Rainbow cho script đặc biệt
+    if premium or socialType then
         task.spawn(function()
             local hue = 0
             while btn.Parent do
@@ -140,56 +117,59 @@ local function createScriptBtn(text, url, premium, social, delayLoad)
         end)
     end
 
-    -- Social highlight
-    if social then
-        task.spawn(function()
-            local hue = 0
-            while btn.Parent do
-                hue = (hue + 2) % 360
-                btn.TextColor3 = Color3.fromHSV(hue/360, 0.8, 1)
-                task.wait(0.05)
-            end
-        end)
-    end
-
-    -- Click
+    -- Khi bấm
     btn.MouseButton1Click:Connect(function()
         local ok, err = pcall(function()
-            if url then
-                if delayLoad then
-                    showLoading("⏳ Loading " .. text .. "...", 3)
-                    task.wait(3)
-                end
-                loadstring(game:HttpGet(url))()
-            else
+            if socialType == "tiktok" then
+                setclipboard("https://www.tiktok.com/@evenher6?is_from_webapp=1&sender_device=pc")
                 game.StarterGui:SetCore("SendNotification", {
-                    Title = "Notice",
-                    Text = "Follow my TikTok to get access!",
+                    Title = "TikTok",
+                    Text = "Link copied! Paste in browser 🔗",
                     Duration = 5
                 })
+            elseif socialType == "youtube" then
+                setclipboard("https://youtube.com/")
+                game.StarterGui:SetCore("SendNotification", {
+                    Title = "YouTube",
+                    Text = "Link copied! Subscribe for more 🔔",
+                    Duration = 5
+                })
+            elseif socialType == "discord" then
+                setclipboard("https://discord.com/")
+                game.StarterGui:SetCore("SendNotification", {
+                    Title = "Discord",
+                    Text = "Link copied! Join community 💬",
+                    Duration = 5
+                })
+            elseif url then
+                -- 3 script đầu có loading
+                if text == "Argon Hub X" or text == "Sinaloa Hub" or text == "RX Hub" then
+                    runWithLoading(url)
+                else
+                    loadstring(game:HttpGet(url))()
+                end
             end
         end)
         if not ok then warn("⚠️ Script lỗi:", err) end
     end)
 
+    -- Update scroll
     scroll.CanvasSize = UDim2.new(0, 0, 0, list.AbsoluteContentSize.Y + 20)
 end
 
--- Scripts thường (loading bar 3s)
-createScriptBtn("Argon Hub X", "https://raw.githubusercontent.com/AgentX771/ArgonHubX/main/Loader.lua", false, false, true)
-createScriptBtn("Sinaloa Hub", "https://api.luarmor.net/files/v3/loaders/63e751ce9ac5e9bcb4e7246c9775af78.lua", false, false, true)
-createScriptBtn("RX Hub", "https://raw.githubusercontent.com/NodeX-Enc/NodeX/refs/heads/main/Main.lua", false, false, true)
-
--- Scripts đặc biệt (không còn chữ Premium)
+-- Scripts
+createScriptBtn("Argon Hub X", "https://raw.githubusercontent.com/AgentX771/ArgonHubX/main/Loader.lua")
+createScriptBtn("Sinaloa Hub", "https://api.luarmor.net/files/v3/loaders/63e751ce9ac5e9bcb4e7246c9775af78.lua")
+createScriptBtn("RX Hub", "https://raw.githubusercontent.com/NodeX-Enc/NodeX/refs/heads/main/Main.lua")
 createScriptBtn("Allusive", nil, true)
 createScriptBtn("UwU", nil, true)
 
--- Social highlight
-createScriptBtn("⭐ Follow my TikTok for Blade Ball updates!", nil, false, true)
-createScriptBtn("🎥 Subscribe my YouTube for more scripts!", nil, false, true)
-createScriptBtn("💬 Join my Discord for more game scripts!", nil, false, true)
+-- Social buttons
+createScriptBtn("⭐ Follow my TikTok for script updates!", nil, false, "tiktok")
+createScriptBtn("📺 Subscribe my YouTube for more scripts!", nil, false, "youtube")
+createScriptBtn("💬 Join my Discord for more game scripts!", nil, false, "discord")
 
--- Toggle
+-- Toggle nút
 local toggleBtn = Instance.new("TextButton", subGui)
 toggleBtn.Size = UDim2.new(0, 45, 0, 45)
 toggleBtn.Position = UDim2.new(0, 15, 0.75, 0)
