@@ -90,7 +90,7 @@ local function createScriptBtn(text, url, premium)
         TweenService:Create(btn, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(35, 35, 45)}):Play()
     end)
 
-    -- Premium glow (rainbow)
+    -- Premium glow (rainbow text)
     if premium then
         task.spawn(function()
             local hue = 0
@@ -109,7 +109,7 @@ local function createScriptBtn(text, url, premium)
             else
                 game.StarterGui:SetCore("SendNotification", {
                     Title = "Premium",
-                    Text = "Follow my TikTok để nhận update!",
+                    Text = "Follow my TikTok and wait for updates!",
                     Duration = 5
                 })
             end
@@ -121,12 +121,85 @@ local function createScriptBtn(text, url, premium)
     scroll.CanvasSize = UDim2.new(0, 0, 0, list.AbsoluteContentSize.Y + 20)
 end
 
+-- Hàm tạo dòng mạng xã hội nổi bật
+local function createSocialLine(name, url, style)
+    local btn = Instance.new("TextButton", scroll)
+    btn.Size = UDim2.new(0.9, 0, 0, 40)
+    btn.BackgroundTransparency = 1
+    btn.AutoButtonColor = false
+    btn.Font = Enum.Font.GothamBold
+    btn.TextSize = 18
+    btn.Text = name
+
+    -- Hiệu ứng riêng
+    if style == "tiktok" then
+        task.spawn(function()
+            local hue = 0
+            while btn.Parent do
+                hue = (hue + 2) % 360
+                btn.TextColor3 = Color3.fromHSV(hue/360, 0.9, 1)
+                task.wait(0.05)
+            end
+        end)
+    elseif style == "youtube" then
+        task.spawn(function()
+            local on = true
+            while btn.Parent do
+                btn.TextColor3 = on and Color3.fromRGB(255, 50, 50) or Color3.fromRGB(255,255,255)
+                on = not on
+                task.wait(0.6)
+            end
+        end)
+    elseif style == "discord" then
+        local uiGradient = Instance.new("UIGradient", btn)
+        uiGradient.Color = ColorSequence.new{
+            ColorSequenceKeypoint.new(0, Color3.fromRGB(114,137,218)),
+            ColorSequenceKeypoint.new(1, Color3.fromRGB(88,101,242))
+        }
+        uiGradient.Rotation = 0
+        task.spawn(function()
+            while btn.Parent do
+                for i = 0, 1, 0.01 do
+                    uiGradient.Offset = Vector2.new(i, 0)
+                    task.wait(0.03)
+                end
+            end
+        end)
+        btn.TextColor3 = Color3.fromRGB(255,255,255)
+    end
+
+    -- Copy link
+    btn.MouseButton1Click:Connect(function()
+        if setclipboard then
+            setclipboard(url)
+            game.StarterGui:SetCore("SendNotification", {
+                Title = "✅ Copied!",
+                Text = url,
+                Duration = 3
+            })
+        else
+            game.StarterGui:SetCore("SendNotification", {
+                Title = "⚠️",
+                Text = "Your executor does not support setclipboard!",
+                Duration = 3
+            })
+        end
+    end)
+
+    scroll.CanvasSize = UDim2.new(0, 0, 0, list.AbsoluteContentSize.Y + 20)
+end
+
 -- Scripts
 createScriptBtn("Argon Hub X", "https://raw.githubusercontent.com/AgentX771/ArgonHubX/main/Loader.lua")
 createScriptBtn("Sinaloa Hub", "https://api.luarmor.net/files/v3/loaders/63e751ce9ac5e9bcb4e7246c9775af78.lua")
 createScriptBtn("RX Hub", "https://raw.githubusercontent.com/NodeX-Enc/NodeX/refs/heads/main/Main.lua")
 createScriptBtn("Allusive (Premium)", nil, true)
 createScriptBtn("UwU (Premium)", nil, true)
+
+-- Social Lines
+createSocialLine("📱 Follow my TikTok for exclusive scripts!", "https://www.tiktok.com/@yourname", "tiktok")
+createSocialLine("🔴 Subscribe to my YouTube for more hacks!", "https://www.youtube.com/@user-qe3dv7iy2j", "youtube")
+createSocialLine("💬 Join my Discord for more game scripts!", "https://discord.gg/fkDMHngGCk", "discord")
 
 -- Toggle nút (fade in/out)
 local toggleBtn = Instance.new("TextButton", subGui)
