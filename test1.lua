@@ -1,94 +1,111 @@
+-- Blade Ball GUI phụ (thu nhỏ + thêm scroll + giữ hiệu ứng cũ)
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
--- 🔥 Tự chạy script chính ngay khi load
-pcall(function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/anhlinh1136/bladeball/refs/heads/main/Protected_2903763962339231.lua"))()
-end)
+-- Xoá gui cũ nếu có
+local old = playerGui:FindFirstChild("BladeBallMenu")
+if old then old:Destroy() end
 
--- GUI chính Blade Ball (phụ)
-local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "BladeBallMenu"
-screenGui.Parent = playerGui
+-- Tạo ScreenGui
+local subGui = Instance.new("ScreenGui", playerGui)
+subGui.Name = "BladeBallMenu"
+subGui.ResetOnSpawn = false
 
--- Nút Toggle (≡)
-local toggleButton = Instance.new("TextButton")
-toggleButton.Name = "ToggleButton"
-toggleButton.Size = UDim2.new(0, 40, 0, 40)
-toggleButton.Position = UDim2.new(0, 20, 1, -60) -- góc trái dưới
-toggleButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-toggleButton.Text = "≡"
-toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-toggleButton.Font = Enum.Font.SourceSansBold
-toggleButton.TextSize = 24
-toggleButton.Parent = screenGui
-toggleButton.Active = true
-toggleButton.Draggable = true
-
--- Khung chính GUI phụ
-local frame = Instance.new("Frame")
-frame.Name = "BladeBallFrame"
-frame.Size = UDim2.new(0, 300, 0, 350) -- nhỏ hơn bản cũ
-frame.Position = UDim2.new(0.5, -150, 0.5, -175)
+-- Khung chính (Frame nhỏ hơn 25%)
+local frame = Instance.new("Frame", subGui)
+frame.Size = UDim2.new(0.5, 0, 0.45, 0) -- nhỏ hơn trước
+frame.AnchorPoint = Vector2.new(0.5, 0.5)
+frame.Position = UDim2.new(0.5, 0, 0.5, 0)
 frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 frame.BorderSizePixel = 0
-frame.Visible = false
-frame.Parent = screenGui
+Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 12)
 
--- Bo tròn
-local corner = Instance.new("UICorner")
-corner.CornerRadius = UDim.new(0, 12)
-corner.Parent = frame
+-- Tiêu đề
+local title = Instance.new("TextLabel", frame)
+title.Size = UDim2.new(1, -20, 0, 40)
+title.Position = UDim2.new(0, 10, 0, 0)
+title.BackgroundTransparency = 1
+title.Font = Enum.Font.GothamBold
+title.TextSize = 20
+title.TextColor3 = Color3.fromRGB(230, 230, 230)
+title.Text = "⚔️ Blade Ball Scripts"
 
--- ScrollFrame để chứa nút script
-local scroll = Instance.new("ScrollingFrame")
-scroll.Size = UDim2.new(1, -10, 1, -10)
-scroll.Position = UDim2.new(0, 5, 0, 5)
-scroll.CanvasSize = UDim2.new(0, 0, 0, 0)
+-- ScrollFrame để chứa danh sách scripts
+local scroll = Instance.new("ScrollingFrame", frame)
+scroll.Size = UDim2.new(1, -20, 1, -60)
+scroll.Position = UDim2.new(0, 10, 0, 50)
+scroll.BackgroundTransparency = 1
 scroll.ScrollBarThickness = 6
-scroll.Parent = frame
+scroll.CanvasSize = UDim2.new(0, 0, 0, 0)
 
-local listLayout = Instance.new("UIListLayout")
-listLayout.Padding = UDim.new(0, 6)
-listLayout.FillDirection = Enum.FillDirection.Vertical
-listLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
-listLayout.SortOrder = Enum.SortOrder.LayoutOrder
-listLayout.Parent = scroll
+local list = Instance.new("UIListLayout", scroll)
+list.Padding = UDim.new(0, 8)
+list.FillDirection = Enum.FillDirection.Vertical
+list.HorizontalAlignment = Enum.HorizontalAlignment.Center
+list.VerticalAlignment = Enum.VerticalAlignment.Top
+list.SortOrder = Enum.SortOrder.LayoutOrder
 
--- Hàm thêm nút script
-local function createScriptButton(name, url)
-    local btn = Instance.new("TextButton")
-    btn.Size = UDim2.new(1, -20, 0, 40)
-    btn.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
-    btn.Text = name
+-- Hàm tạo nút Script
+local function createScriptBtn(text, url, premium)
+    local btn = Instance.new("TextButton", scroll)
+    btn.Size = UDim2.new(0.9, 0, 0, 45)
+    btn.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+    btn.Font = Enum.Font.Gotham
+    btn.TextSize = 16
     btn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    btn.Font = Enum.Font.SourceSansBold
-    btn.TextSize = 18
-    btn.Parent = scroll
+    btn.Text = text
+    Instance.new("UICorner", btn).CornerRadius = UDim.new(0, 8)
 
-    local btnCorner = Instance.new("UICorner")
-    btnCorner.CornerRadius = UDim.new(0, 8)
-    btnCorner.Parent = btn
+    -- Hiệu ứng rainbow cho script premium
+    if premium then
+        task.spawn(function()
+            local hue = 0
+            while btn.Parent do
+                hue = (hue + 1) % 360
+                btn.BackgroundColor3 = Color3.fromHSV(hue / 360, 0.8, 0.8)
+                task.wait(0.05)
+            end
+        end)
+    end
 
     btn.MouseButton1Click:Connect(function()
-        pcall(function()
-            loadstring(game:HttpGet(url))()
+        local ok, err = pcall(function()
+            if url then
+                loadstring(game:HttpGet(url))()
+            else
+                game.StarterGui:SetCore("SendNotification", {
+                    Title = "Premium",
+                    Text = "Follow my TikTok and wait for update!",
+                    Duration = 5
+                })
+            end
         end)
+        if not ok then warn("⚠️ Script lỗi:", err) end
     end)
 
-    -- cập nhật chiều cao scroll
-    scroll.CanvasSize = UDim2.new(0, 0, 0, listLayout.AbsoluteContentSize.Y + 10)
+    -- Auto cập nhật chiều cao canvas để scroll hoạt động
+    scroll.CanvasSize = UDim2.new(0, 0, 0, list.AbsoluteContentSize.Y + 20)
 end
 
--- ⚡ Thêm các script nút
-createScriptButton("UwU Hub", "https://raw.githubusercontent.com/anhlinh1136/bladeball/refs/heads/main/Protected_2903763962339231.lua")
-createScriptButton("Allusive", "https://raw.githubusercontent.com/anhlinh1136/bladeball/refs/heads/main/Protected_2903763962339231.lua")
-createScriptButton("RX Hub", "https://pastebin.com/raw/RXhub123")
-createScriptButton("Zen Hub", "https://pastebin.com/raw/Zenhub123")
--- Bạn có thể thêm nhiều nút khác theo format trên ↑
+-- Các scripts
+createScriptBtn("Argon Hub X", "https://raw.githubusercontent.com/AgentX771/ArgonHubX/main/Loader.lua")
+createScriptBtn("Sinaloa Hub", "https://api.luarmor.net/files/v3/loaders/63e751ce9ac5e9bcb4e7246c9775af78.lua")
+createScriptBtn("RX Hub", "https://raw.githubusercontent.com/NodeX-Enc/NodeX/refs/heads/main/Main.lua")
+createScriptBtn("Allusive (Premium)", nil, true)
+createScriptBtn("UwU (Premium)", nil, true)
 
--- Toggle ẩn/hiện GUI
-toggleButton.MouseButton1Click:Connect(function()
+-- Nút toggle ẩn/hiện
+local toggleBtn = Instance.new("TextButton", subGui)
+toggleBtn.Size = UDim2.new(0, 40, 0, 40)
+toggleBtn.Position = UDim2.new(0, 10, 0.8, 0) -- ở góc trái màn hình
+toggleBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+toggleBtn.Text = "≡"
+toggleBtn.Font = Enum.Font.GothamBold
+toggleBtn.TextSize = 20
+toggleBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+Instance.new("UICorner", toggleBtn).CornerRadius = UDim.new(1, 0)
+
+toggleBtn.MouseButton1Click:Connect(function()
     frame.Visible = not frame.Visible
 end)
