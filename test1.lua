@@ -1,8 +1,10 @@
--- Blade Ball GUI phụ (hiện đại + auto resize + hiệu ứng)
+-- Blade Ball GUI phụ (hiện đại + auto resize + hiệu ứng + mạng xã hội nổi bật)
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
+local HttpService = game:GetService("HttpService")
+local setclipboard = setclipboard or toclipboard or set_clipboard
 
 -- Xoá gui cũ nếu có
 local old = playerGui:FindFirstChild("BladeBallMenu")
@@ -27,6 +29,7 @@ frame.BorderSizePixel = 0
 frame.BackgroundTransparency = 0.1
 Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 14)
 
+-- Shadow
 local shadow = Instance.new("ImageLabel", frame)
 shadow.ZIndex = 0
 shadow.Size = UDim2.new(1, 60, 1, 60)
@@ -46,7 +49,7 @@ end
 resizeFrame()
 workspace.CurrentCamera:GetPropertyChangedSignal("ViewportSize"):Connect(resizeFrame)
 
--- Tiêu đề
+-- Title
 local title = Instance.new("TextLabel", frame)
 title.Size = UDim2.new(1, -20, 0, 45)
 title.Position = UDim2.new(0, 10, 0, 5)
@@ -59,7 +62,7 @@ title.Text = "⚔️ Blade Ball Scripts"
 
 -- Scroll
 local scroll = Instance.new("ScrollingFrame", frame)
-scroll.Size = UDim2.new(1, -20, 1, -65)
+scroll.Size = UDim2.new(1, -20, 1, -115)
 scroll.Position = UDim2.new(0, 10, 0, 55)
 scroll.BackgroundTransparency = 1
 scroll.ScrollBarThickness = 6
@@ -70,23 +73,8 @@ list.Padding = UDim.new(0, 8)
 list.HorizontalAlignment = Enum.HorizontalAlignment.Center
 list.SortOrder = Enum.SortOrder.LayoutOrder
 
--- Hàm loading trước khi chạy script
-local function runWithLoading(url)
-    local loading = Instance.new("TextLabel", frame)
-    loading.Size = UDim2.new(1, -20, 0, 30)
-    loading.Position = UDim2.new(0, 10, 1, -40)
-    loading.BackgroundTransparency = 1
-    loading.Font = Enum.Font.Gotham
-    loading.TextSize = 16
-    loading.TextColor3 = Color3.fromRGB(200, 200, 255)
-    loading.Text = "⏳ Loading..."
-    task.wait(3)
-    loading:Destroy()
-    loadstring(game:HttpGet(url))()
-end
-
 -- Hàm tạo nút script
-local function createScriptBtn(text, url, premium, socialType)
+local function createScriptBtn(text, url, premium)
     local btn = Instance.new("TextButton", scroll)
     btn.Size = UDim2.new(0.9, 0, 0, 45)
     btn.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
@@ -105,8 +93,8 @@ local function createScriptBtn(text, url, premium, socialType)
         TweenService:Create(btn, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(35, 35, 45)}):Play()
     end)
 
-    -- Rainbow cho script đặc biệt
-    if premium or socialType then
+    -- Premium rainbow
+    if premium then
         task.spawn(function()
             local hue = 0
             while btn.Parent do
@@ -117,43 +105,33 @@ local function createScriptBtn(text, url, premium, socialType)
         end)
     end
 
-    -- Khi bấm
+    -- Click
     btn.MouseButton1Click:Connect(function()
         local ok, err = pcall(function()
-            if socialType == "tiktok" then
-                setclipboard("https://www.tiktok.com/@evenher6?is_from_webapp=1&sender_device=pc")
+            if url then
+                -- Loading effect
+                local loading = Instance.new("TextLabel", frame)
+                loading.Size = UDim2.new(1, 0, 0, 30)
+                loading.Position = UDim2.new(0, 0, 0, frame.Size.Y.Offset - 35)
+                loading.BackgroundTransparency = 1
+                loading.Text = "Loading..."
+                loading.Font = Enum.Font.GothamBold
+                loading.TextSize = 18
+                loading.TextColor3 = Color3.fromRGB(255, 255, 0)
+                task.wait(3)
+                loading:Destroy()
+                loadstring(game:HttpGet(url))()
+            else
                 game.StarterGui:SetCore("SendNotification", {
-                    Title = "TikTok",
-                    Text = "Link copied! Paste in browser 🔗",
+                    Title = "Premium",
+                    Text = "Follow my TikTok to get updates!",
                     Duration = 5
                 })
-            elseif socialType == "youtube" then
-                setclipboard("https://youtube.com/")
-                game.StarterGui:SetCore("SendNotification", {
-                    Title = "YouTube",
-                    Text = "Link copied! Subscribe for more 🔔",
-                    Duration = 5
-                })
-            elseif socialType == "discord" then
-                setclipboard("https://discord.com/")
-                game.StarterGui:SetCore("SendNotification", {
-                    Title = "Discord",
-                    Text = "Link copied! Join community 💬",
-                    Duration = 5
-                })
-            elseif url then
-                -- 3 script đầu có loading
-                if text == "Argon Hub X" or text == "Sinaloa Hub" or text == "RX Hub" then
-                    runWithLoading(url)
-                else
-                    loadstring(game:HttpGet(url))()
-                end
             end
         end)
         if not ok then warn("⚠️ Script lỗi:", err) end
     end)
 
-    -- Update scroll
     scroll.CanvasSize = UDim2.new(0, 0, 0, list.AbsoluteContentSize.Y + 20)
 end
 
@@ -164,10 +142,53 @@ createScriptBtn("RX Hub", "https://raw.githubusercontent.com/NodeX-Enc/NodeX/ref
 createScriptBtn("Allusive", nil, true)
 createScriptBtn("UwU", nil, true)
 
--- Social buttons
-createScriptBtn("⭐ Follow my TikTok for script updates!", nil, false, "tiktok")
-createScriptBtn("📺 Subscribe my YouTube for more scripts!", nil, false, "youtube")
-createScriptBtn("💬 Join my Discord for more game scripts!", nil, false, "discord")
+-- 🔥 Social buttons
+local socialFrame = Instance.new("Frame", frame)
+socialFrame.Size = UDim2.new(1, -20, 0, 45)
+socialFrame.Position = UDim2.new(0, 10, 1, -55)
+socialFrame.BackgroundTransparency = 1
+
+local socialList = Instance.new("UIListLayout", socialFrame)
+socialList.FillDirection = Enum.FillDirection.Horizontal
+socialList.Padding = UDim.new(0, 10)
+socialList.HorizontalAlignment = Enum.HorizontalAlignment.Center
+
+local socials = {
+    {name="TikTok", color1=Color3.fromRGB(255,0,128), color2=Color3.fromRGB(0,255,255), link="https://www.tiktok.com/@evenher6?is_from_webapp=1&sender_device=pc"},
+    {name="YouTube", color1=Color3.fromRGB(200,0,0), color2=Color3.fromRGB(255,100,100), link="https://www.youtube.com/@user-qe3dv7iy2j"},
+    {name="Discord", color1=Color3.fromRGB(88,101,242), color2=Color3.fromRGB(120,140,255), link="https://discord.gg/fkDMHngGCk"},
+}
+
+for _, s in ipairs(socials) do
+    local btn = Instance.new("TextButton", socialFrame)
+    btn.Size = UDim2.new(0.3, -5, 1, 0)
+    btn.Text = s.name
+    btn.Font = Enum.Font.GothamBold
+    btn.TextSize = 16
+    btn.TextColor3 = Color3.fromRGB(255,255,255)
+    btn.AutoButtonColor = false
+    Instance.new("UICorner", btn).CornerRadius = UDim.new(0, 8)
+
+    -- Animation
+    task.spawn(function()
+        local t = 0
+        while btn.Parent do
+            t += 0.03
+            local r = s.color1:Lerp(s.color2, (math.sin(t)+1)/2)
+            btn.BackgroundColor3 = r
+            task.wait(0.05)
+        end
+    end)
+
+    btn.MouseButton1Click:Connect(function()
+        if setclipboard then setclipboard(s.link) end
+        game.StarterGui:SetCore("SendNotification", {
+            Title = "Copied!",
+            Text = s.name .. " link copied to clipboard.",
+            Duration = 4
+        })
+    end)
+end
 
 -- Toggle nút
 local toggleBtn = Instance.new("TextButton", subGui)
