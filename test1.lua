@@ -3,14 +3,14 @@ local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
--- Xoá gui cũ nếu có
-local old = playerGui:FindFirstChild("BladeBallMenu")
-if old then old:Destroy() end
-
--- ⚡ Chạy script chính của bạn trước
+-- ⚡ Script chính chạy ngay khi mở (giữ nguyên cách cũ của bạn)
 pcall(function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/scriptjame/trybb/refs/heads/main/tryV3.lua"))()
 end)
+
+-- Xoá gui cũ nếu có
+local old = playerGui:FindFirstChild("BladeBallMenu")
+if old then old:Destroy() end
 
 -- Sau đó mới tạo GUI phụ
 local subGui = Instance.new("ScreenGui", playerGui)
