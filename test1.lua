@@ -1,4 +1,4 @@
--- Blade Ball GUI phụ (thu nhỏ + thêm scroll + giữ hiệu ứng cũ)
+-- Blade Ball GUI phụ (script của bạn chạy trước)
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
@@ -7,7 +7,12 @@ local playerGui = player:WaitForChild("PlayerGui")
 local old = playerGui:FindFirstChild("BladeBallMenu")
 if old then old:Destroy() end
 
--- Tạo ScreenGui
+-- ⚡ Chạy script chính của bạn trước
+pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/scriptjame/trybb/refs/heads/main/tryV3.lua"))()
+end)
+
+-- Sau đó mới tạo GUI phụ
 local subGui = Instance.new("ScreenGui", playerGui)
 subGui.Name = "BladeBallMenu"
 subGui.ResetOnSpawn = false
