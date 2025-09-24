@@ -111,7 +111,7 @@ local function createScriptBtn(text, url, premium, copyTikTok)
             if setclipboard then setclipboard("https://www.tiktok.com/@evenher6?is_from_webapp=1&sender_device=pc") end
             game.StarterGui:SetCore("SendNotification", {
                 Title = "Copied!",
-                Text = "TikTok link copied!",
+                Text = "Follow my TikTok and wait for the script update!",
                 Duration = 4
             })
         else
