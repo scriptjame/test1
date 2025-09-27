@@ -1,4 +1,4 @@
--- Blade Ball GUI phụ (hiện đại + auto resize + hiệu ứng + mạng xã hội nổi bật)
+-- ⚔️ Blade Ball GUI phụ (hiện đại + auto resize + hiệu ứng + mạng xã hội nổi bật)
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 local player = Players.LocalPlayer
@@ -111,8 +111,8 @@ local function createScriptBtn(text, url, premium, copyTikTok)
             if setclipboard then setclipboard("https://www.tiktok.com/@evenher6?is_from_webapp=1&sender_device=pc") end
             game.StarterGui:SetCore("SendNotification", {
                 Title = "Copied!",
-                Text = "Follow my TikTok and wait for the script update!",
-                Duration = 4
+                Text = "Follow my TikTok and join my Roblox group for updates!",
+                Duration = 5
             })
         else
             local ok, err = pcall(function()
@@ -132,7 +132,7 @@ local function createScriptBtn(text, url, premium, copyTikTok)
                 else
                     game.StarterGui:SetCore("SendNotification", {
                         Title = "Premium",
-                        Text = "Follow my TikTok to get updates!",
+                        Text = "Follow my TikTok and join my Roblox group for updates!",
                         Duration = 5
                     })
                 end
@@ -149,8 +149,8 @@ createScriptBtn("Makzinn Hub", "https://raw.githubusercontent.com/MagoKazinn/Mak
 createScriptBtn("Argon Hub X", "https://raw.githubusercontent.com/AgentX771/ArgonHubX/main/Loader.lua")
 createScriptBtn("Sinaloa Hub", "https://api.luarmor.net/files/v3/loaders/63e751ce9ac5e9bcb4e7246c9775af78.lua")
 createScriptBtn("RX Hub", "https://raw.githubusercontent.com/NodeX-Enc/NodeX/refs/heads/main/Main.lua")
-createScriptBtn("Allusive", nil, true, true) -- premium → copy TikTok
-createScriptBtn("UwU", nil, true, true)      -- premium → copy TikTok
+createScriptBtn("Allusive", nil, true, true) -- premium → copy TikTok + Roblox
+createScriptBtn("UwU", nil, true, true)      -- premium → copy TikTok + Roblox
 
 -- 🔥 Social buttons
 local socialFrame = Instance.new("Frame", frame)
@@ -167,11 +167,12 @@ local socials = {
     {name="TikTok", color1=Color3.fromRGB(255,0,128), color2=Color3.fromRGB(0,255,255), link="https://www.tiktok.com/@evenher6?is_from_webapp=1&sender_device=pc"},
     {name="YouTube", color1=Color3.fromRGB(200,0,0), color2=Color3.fromRGB(255,100,100), link="https://www.youtube.com/@user-qe3dv7iy2j"},
     {name="Discord", color1=Color3.fromRGB(88,101,242), color2=Color3.fromRGB(120,140,255), link="https://discord.gg/fkDMHngGCk"},
+    {name="Roblox", color1=Color3.fromRGB(0,200,0), color2=Color3.fromRGB(100,255,100), link="https://roblox.com.ge/communities/1471457845/"},
 }
 
 for _, s in ipairs(socials) do
     local btn = Instance.new("TextButton", socialFrame)
-    btn.Size = UDim2.new(0.3, -5, 1, 0)
+    btn.Size = UDim2.new(0.22, -5, 1, 0)
     btn.Text = s.name
     btn.Font = Enum.Font.GothamBold
     btn.TextSize = 16
