@@ -148,7 +148,8 @@ end
 -- 🟢 Scripts (Makzinn Hub lên đầu)
 createScriptBtn("Makzinn Hub", "https://raw.githubusercontent.com/MagoKazinn/Makzinn_hub/main/makzinn_Hub")
 createScriptBtn("Argon Hub X", "https://raw.githubusercontent.com/AgentX771/ArgonHubX/main/Loader.lua")
-createScriptBtn("Sinaloa Hub", "https://api.luarmor.net/files/v3/loaders/63e751ce9ac5e9bcb4e7246c9775af78.lua")
+createScriptBtn("Frostware Hub need key", "https://raw.githubusercontent.com/Fsploit/F-R-O-S-T-W-A-R-E/refs/heads/main/Main")
+createScriptBtn("Catsus Hub", "https://raw.githubusercontent.com/3345-c-a-t-s-u-s/-beta-/main/AutoParry.lua")
 createScriptBtn("RX Hub", "https://raw.githubusercontent.com/NodeX-Enc/NodeX/refs/heads/main/Main.lua")
 createScriptBtn("Allusive", nil, true, true) -- premium → copy TikTok + Roblox
 createScriptBtn("UwU", nil, true, true)      -- premium → copy TikTok + Roblox
