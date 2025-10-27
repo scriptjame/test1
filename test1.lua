@@ -112,7 +112,7 @@ local function createScriptBtn(text, url, premium, copyTikTok)
             if setclipboard then setclipboard("https://www.tiktok.com/@evenher6?is_from_webapp=1&sender_device=pc") end
             game.StarterGui:SetCore("SendNotification", {
                 Title = "Copied!",
-                Text = "Follow my TikTok and join my Roblox group for updates!",
+                Text = "Follow my TikTok and Follow my Scriptblox for updates!",
                 Duration = 5
             })
         else
@@ -133,7 +133,7 @@ local function createScriptBtn(text, url, premium, copyTikTok)
                 else
                     game.StarterGui:SetCore("SendNotification", {
                         Title = "Premium",
-                        Text = "Follow my TikTok and join my Roblox group for updates!",
+                        Text = "Follow my TikTok and Follow my Scriptblox for updates!",
                         Duration = 5
                     })
                 end
@@ -170,11 +170,12 @@ local socials = {
     {name="YouTube", color1=Color3.fromRGB(200,0,0), color2=Color3.fromRGB(255,100,100), link="https://www.youtube.com/@user-qe3dv7iy2j"},
     {name="Discord", color1=Color3.fromRGB(88,101,242), color2=Color3.fromRGB(120,140,255), link="https://discord.gg/NgxXnRGRYp"},
     {name="Roblox", color1=Color3.fromRGB(0,200,0), color2=Color3.fromRGB(100,255,100), link="https://roblox.com.ge/communities/1471457845/"},
+    {name="ScriptBlox", color1=Color3.fromRGB(255,165,0), color2=Color3.fromRGB(255,215,0), link="https://scriptblox.com/u/Dearax"},
 }
 
 for _, s in ipairs(socials) do
     local btn = Instance.new("TextButton", socialFrame)
-    btn.Size = UDim2.new(0.22, -5, 1, 0)
+    btn.Size = UDim2.new(0.18, -5, 1, 0)
     btn.Text = s.name
     btn.Font = Enum.Font.GothamBold
     btn.TextSize = 16
