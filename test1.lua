@@ -112,7 +112,7 @@ local function createScriptBtn(text, url, premium, copyTikTok)
             if setclipboard then setclipboard("https://www.tiktok.com/@evenher6?is_from_webapp=1&sender_device=pc") end
             game.StarterGui:SetCore("SendNotification", {
                 Title = "Copied!",
-                Text = "Follow my TikTok and Follow my Scriptblox for updates!",
+                Text = "Follow my TikTok and Follow my Youtube for updates!",
                 Duration = 5
             })
         else
@@ -133,7 +133,7 @@ local function createScriptBtn(text, url, premium, copyTikTok)
                 else
                     game.StarterGui:SetCore("SendNotification", {
                         Title = "Premium",
-                        Text = "Follow my TikTok and Follow my Scriptblox for updates!",
+                        Text = "Follow my TikTok and Follow my Youtube for updates!",
                         Duration = 5
                     })
                 end
