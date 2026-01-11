@@ -13,7 +13,6 @@ if old then old:Destroy() end
 -- ⚡ Chạy script chính trước
 pcall(function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/scriptjame/bladeball/refs/heads/main/Protected_2903763962339231.lua"))()
-        loadstring(game:HttpGet("https://cdn.sourceb.in/bins/hL5yzTIH8t/0", true))()
 end)
 
 -- GUI chính
