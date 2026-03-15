@@ -1,4 +1,4 @@
--- ⚔️ Blade Ball GUI phụ (PRO UI + Animation)
+-- ⚔️ Blade Ball GUI phụ (Animation + Gradient UI)
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 local UIS = game:GetService("UserInputService")
@@ -34,31 +34,23 @@ frame.Size = UDim2.new(0,420,0,320)
 frame.Position = UDim2.new(0.5,-210,0.5,-160)
 frame.BackgroundColor3 = Color3.fromRGB(30,30,35)
 frame.BorderSizePixel = 0
-frame.BackgroundTransparency = 0.1
+frame.BackgroundTransparency = 0.05
 Instance.new("UICorner",frame).CornerRadius = UDim.new(0,14)
 
--- SOFT GRADIENT (giống kiểu ảnh bạn gửi)
+-- 🌈 Gradient nền đẹp hơn
 local grad = Instance.new("UIGradient",frame)
 grad.Color = ColorSequence.new{
-    ColorSequenceKeypoint.new(0,Color3.fromRGB(60,65,85)),
-    ColorSequenceKeypoint.new(0.5,Color3.fromRGB(40,45,60)),
-    ColorSequenceKeypoint.new(1,Color3.fromRGB(25,25,35))
+    ColorSequenceKeypoint.new(0,Color3.fromRGB(70,90,140)),
+    ColorSequenceKeypoint.new(0.5,Color3.fromRGB(45,55,90)),
+    ColorSequenceKeypoint.new(1,Color3.fromRGB(30,35,55))
 }
-grad.Rotation = 45
+grad.Rotation = 35
 
--- BORDER RGB
+-- 🟦 Border màu cố định
 local stroke = Instance.new("UIStroke",frame)
 stroke.Thickness = 2
-stroke.Transparency = 0.2
-
-task.spawn(function()
-    local h=0
-    while frame.Parent do
-        h=(h+1)%360
-        stroke.Color = Color3.fromHSV(h/360,0.7,1)
-        task.wait(0.03)
-    end
-end)
+stroke.Color = Color3.fromRGB(120,160,255)
+stroke.Transparency = 0.1
 
 -- TITLE
 local title = Instance.new("TextLabel",frame)
@@ -174,25 +166,11 @@ createScriptBtn("RX Hub","https://raw.githubusercontent.com/NodeX-Enc/NodeX/refs
 createScriptBtn("Allusive",nil,true,true)
 createScriptBtn("UwU",nil,true,true)
 
--- ANIMATION OPEN
-local function openAnimation()
-
-    frame.Visible = true
-    frame.Size = UDim2.new(0,100,0,80)
-    frame.BackgroundTransparency = 1
-
-    TweenService:Create(frame,TweenInfo.new(0.35,Enum.EasingStyle.Back,Enum.EasingDirection.Out),{
-        Size = UDim2.new(0,420,0,320),
-        BackgroundTransparency = 0.1
-    }):Play()
-
-end
-
--- ANIMATION CLOSE
+-- 🔥 ANIMATION ẨN GUI
 local function closeAnimation()
 
-    local tween = TweenService:Create(frame,TweenInfo.new(0.25),{
-        Size = UDim2.new(0,100,0,80),
+    local tween = TweenService:Create(frame,TweenInfo.new(0.35,Enum.EasingStyle.Quad),{
+        Position = UDim2.new(0.5,-210,1,50),
         BackgroundTransparency = 1
     })
 
@@ -201,6 +179,19 @@ local function closeAnimation()
     tween.Completed:Connect(function()
         frame.Visible = false
     end)
+
+end
+
+-- 🔥 ANIMATION MỞ GUI
+local function openAnimation()
+
+    frame.Visible = true
+    frame.Position = UDim2.new(0.5,-210,1,50)
+
+    TweenService:Create(frame,TweenInfo.new(0.35,Enum.EasingStyle.Back),{
+        Position = UDim2.new(0.5,-210,0.5,-160),
+        BackgroundTransparency = 0.05
+    }):Play()
 
 end
 
