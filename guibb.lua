@@ -1,4 +1,4 @@
--- ⚔️ Blade Ball GUI phụ (PRO UI UPDATE)
+-- ⚔️ Blade Ball GUI phụ (PRO UI + Animation)
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 local UIS = game:GetService("UserInputService")
@@ -22,7 +22,7 @@ local gui = Instance.new("ScreenGui",playerGui)
 gui.Name = "BladeBallMenu"
 gui.ResetOnSpawn = false
 
--- SOUND CLICK
+-- CLICK SOUND
 local clickSound = Instance.new("Sound")
 clickSound.SoundId = "rbxassetid://6026984224"
 clickSound.Volume = 1
@@ -32,27 +32,30 @@ clickSound.Parent = gui
 local frame = Instance.new("Frame",gui)
 frame.Size = UDim2.new(0,420,0,320)
 frame.Position = UDim2.new(0.5,-210,0.5,-160)
-frame.BackgroundColor3 = Color3.fromRGB(20,20,25)
+frame.BackgroundColor3 = Color3.fromRGB(30,30,35)
 frame.BorderSizePixel = 0
+frame.BackgroundTransparency = 0.1
+Instance.new("UICorner",frame).CornerRadius = UDim.new(0,14)
 
-Instance.new("UICorner",frame).CornerRadius = UDim.new(0,12)
-
--- GRADIENT
+-- SOFT GRADIENT (giống kiểu ảnh bạn gửi)
 local grad = Instance.new("UIGradient",frame)
 grad.Color = ColorSequence.new{
-    ColorSequenceKeypoint.new(0,Color3.fromRGB(30,30,40)),
-    ColorSequenceKeypoint.new(1,Color3.fromRGB(15,15,20))
+    ColorSequenceKeypoint.new(0,Color3.fromRGB(60,65,85)),
+    ColorSequenceKeypoint.new(0.5,Color3.fromRGB(40,45,60)),
+    ColorSequenceKeypoint.new(1,Color3.fromRGB(25,25,35))
 }
+grad.Rotation = 45
 
--- RGB BORDER
+-- BORDER RGB
 local stroke = Instance.new("UIStroke",frame)
 stroke.Thickness = 2
+stroke.Transparency = 0.2
 
 task.spawn(function()
     local h=0
     while frame.Parent do
         h=(h+1)%360
-        stroke.Color = Color3.fromHSV(h/360,1,1)
+        stroke.Color = Color3.fromHSV(h/360,0.7,1)
         task.wait(0.03)
     end
 end)
@@ -65,10 +68,10 @@ title.BackgroundTransparency = 1
 title.Font = Enum.Font.GothamBold
 title.Text = "⚔️ Blade Ball Scripts"
 title.TextSize = 20
-title.TextColor3 = Color3.fromRGB(200,255,200)
+title.TextColor3 = Color3.fromRGB(230,255,230)
 title.TextXAlignment = Enum.TextXAlignment.Left
 
--- HIDE BUTTON (-)
+-- HIDE BUTTON
 local hideBtn = Instance.new("TextButton",frame)
 hideBtn.Size = UDim2.new(0,30,0,30)
 hideBtn.Position = UDim2.new(1,-35,0,5)
@@ -117,11 +120,15 @@ local function createScriptBtn(text,url,premium,copyTikTok)
     Instance.new("UICorner",btn).CornerRadius = UDim.new(0,8)
 
     btn.MouseEnter:Connect(function()
-        TweenService:Create(btn,TweenInfo.new(0.2),{BackgroundColor3=Color3.fromRGB(60,60,90)}):Play()
+        TweenService:Create(btn,TweenInfo.new(0.2),{
+            BackgroundColor3=Color3.fromRGB(70,70,110)
+        }):Play()
     end)
 
     btn.MouseLeave:Connect(function()
-        TweenService:Create(btn,TweenInfo.new(0.2),{BackgroundColor3=Color3.fromRGB(35,35,45)}):Play()
+        TweenService:Create(btn,TweenInfo.new(0.2),{
+            BackgroundColor3=Color3.fromRGB(35,35,45)
+        }):Play()
     end)
 
     if premium then
@@ -158,7 +165,7 @@ local function createScriptBtn(text,url,premium,copyTikTok)
 
 end
 
--- SCRIPTS (GIỮ NGUYÊN)
+-- SCRIPT LIST (GIỮ NGUYÊN)
 createScriptBtn("Makzinn Hub","https://raw.githubusercontent.com/MagoKazinn/Makzinn_hub/main/makzinn_Hub")
 createScriptBtn("Argon Hub X","https://raw.githubusercontent.com/AgentX771/ArgonHubX/main/Loader.lua")
 createScriptBtn("Frostware Hub need key","https://raw.githubusercontent.com/Fsploit/F-R-O-S-T-W-A-R-E/refs/heads/main/Main")
@@ -167,18 +174,48 @@ createScriptBtn("RX Hub","https://raw.githubusercontent.com/NodeX-Enc/NodeX/refs
 createScriptBtn("Allusive",nil,true,true)
 createScriptBtn("UwU",nil,true,true)
 
+-- ANIMATION OPEN
+local function openAnimation()
+
+    frame.Visible = true
+    frame.Size = UDim2.new(0,100,0,80)
+    frame.BackgroundTransparency = 1
+
+    TweenService:Create(frame,TweenInfo.new(0.35,Enum.EasingStyle.Back,Enum.EasingDirection.Out),{
+        Size = UDim2.new(0,420,0,320),
+        BackgroundTransparency = 0.1
+    }):Play()
+
+end
+
+-- ANIMATION CLOSE
+local function closeAnimation()
+
+    local tween = TweenService:Create(frame,TweenInfo.new(0.25),{
+        Size = UDim2.new(0,100,0,80),
+        BackgroundTransparency = 1
+    })
+
+    tween:Play()
+
+    tween.Completed:Connect(function()
+        frame.Visible = false
+    end)
+
+end
+
 -- HIDE GUI
 hideBtn.MouseButton1Click:Connect(function()
     clickSound:Play()
-    frame.Visible=false
-    openBtn.Visible=true
+    closeAnimation()
+    openBtn.Visible = true
 end)
 
 -- OPEN GUI
 openBtn.MouseButton1Click:Connect(function()
     clickSound:Play()
-    frame.Visible=true
-    openBtn.Visible=false
+    openAnimation()
+    openBtn.Visible = false
 end)
 
 -- DRAG SYSTEM
