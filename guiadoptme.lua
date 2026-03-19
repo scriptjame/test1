@@ -150,9 +150,8 @@ end
 
 -- Adopt Me scripts
 createBtn("INF Hub","https://raw.githubusercontent.com/INF-Hub-PL/AdoptMeSpawner/refs/heads/main/PetSpawner")
-createBtn("Jazzedd Hub","https://raw.githubusercontent.com/jazzedd/JazradScript/refs/heads/main/Script")
+createBtn("Rage Hub","https://raw.githubusercontent.com/adaptyzz/vault/refs/heads/main/ragesploitt")
 
-createBtn("Ikai Hub (Premium)",nil,true,true)
 createBtn("Soseiwe Hub (Premium)",nil,true,true)
 
 -- socials
