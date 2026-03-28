@@ -155,7 +155,7 @@ end
 
 -- scripts
 createBtn("Monster Hub","https://raw.githubusercontent.com/giahuy2511-coder/MonsterHub/refs/heads/main/MonsterHubEN")
-createBtn("Gravity Hub","https://raw.githubusercontent.com/Dev-GravityHub/BloxFruit/refs/heads/main/Main.lua")
+createBtn("Gani Hub","https://raw.githubusercontent.com/ABDUJDHF/SEAHELPERV1/refs/heads/main/Script")
 createBtn("Annie Hub","https://raw.githubusercontent.com/Anniecreate86/BloxFruits/refs/heads/main/BetaHub-BF")
 createBtn("Banana Hub","https://raw.githubusercontent.com/Chiriku2013/BananaCatHub/refs/heads/main/BananaCatHub.lua")
 createBtn("Zynex Hub","https://raw.githubusercontent.com/Hirokai-Script-make/Zynexhubbloxfruit/refs/heads/main/ZynexHub-BloxFruit-redz.lua")
