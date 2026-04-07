@@ -176,6 +176,32 @@ Text="TikTok copied.",
 Duration=4
 })
 end)
+-- YouTube
+local youtube = Instance.new("TextButton", frame)
+youtube.Size = UDim2.new(0.48, -5, 0, 28)
+youtube.Position = UDim2.new(0.52, 5, 1, -35)
+youtube.Text = "YouTube"
+youtube.Font = Enum.Font.GothamBold
+youtube.TextSize = 13
+youtube.TextColor3 = Color3.new(1,1,1)
+youtube.BackgroundColor3 = Color3.fromRGB(255, 0, 0) -- đỏ YouTube
+Instance.new("UICorner", youtube).CornerRadius = UDim.new(0,8)
+
+-- chỉnh lại TikTok nhỏ lại để nằm bên trái
+tiktok.Size = UDim2.new(0.48, -5, 0, 28)
+tiktok.Position = UDim2.new(0, 20, 1, -35)
+
+youtube.MouseButton1Click:Connect(function()
+	click(youtube)
+	if setclipboard then
+		setclipboard("https://youtube.com/@yourchannel") -- sửa link của bạn
+	end
+	game.StarterGui:SetCore("SendNotification",{
+		Title="Copied!",
+		Text="YouTube copied.",
+		Duration=4
+	})
+end)
 
 -- reopen
 local reopen=Instance.new("TextButton",gui)
