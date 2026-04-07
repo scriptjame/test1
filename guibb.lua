@@ -47,7 +47,7 @@ local stroke=Instance.new("UIStroke",frame)
 stroke.Color=Color3.fromRGB(120,170,255)
 stroke.Transparency=0.7
 
--- 🔥 TITLE BAR (DRAG HERE)
+-- TITLE
 local titleBar = Instance.new("Frame", frame)
 titleBar.Size = UDim2.new(1,0,0,40)
 titleBar.BackgroundTransparency = 1
@@ -121,19 +121,20 @@ TweenService:Create(btn,TweenInfo.new(.08),{Size=UDim2.new(0.95,0,0,36)}):Play()
 task.wait(.08)
 TweenService:Create(btn,TweenInfo.new(.08),{Size=UDim2.new(0.92,0,0,34)}):Play()
 
+-- ✅ FIX PREMIUM TẠI ĐÂY
 if copy then
-if setclipboard then
-setclipboard("www.tiktok.com/@renan1627")
-end
-game.StarterGui:SetCore("SendNotification",{
-Title="Copied!",
-Text="Follow TikTok!",
-Duration=4
-})
+	if setclipboard then
+		setclipboard("www.tiktok.com/@renan1627")
+	end
+	game.StarterGui:SetCore("SendNotification",{
+		Title="Premium",
+		Text="Follow YouTube and TikTok for update",
+		Duration=4
+	})
 else
-if url then
-loadstring(game:HttpGet(url))()
-end
+	if url then
+		loadstring(game:HttpGet(url))()
+	end
 end
 
 end)
@@ -156,7 +157,7 @@ createBtn("UwU",nil,true,true)
 
 -- TikTok
 local tiktok=Instance.new("TextButton",frame)
-tiktok.Size=UDim2.new(1,-40,0,28)
+tiktok.Size=UDim2.new(0.48,-5,0,28)
 tiktok.Position=UDim2.new(0,20,1,-35)
 tiktok.Text="TikTok"
 tiktok.Font=Enum.Font.GothamBold
@@ -176,6 +177,7 @@ Text="TikTok copied.",
 Duration=4
 })
 end)
+
 -- YouTube
 local youtube = Instance.new("TextButton", frame)
 youtube.Size = UDim2.new(0.48, -5, 0, 28)
@@ -184,17 +186,13 @@ youtube.Text = "YouTube"
 youtube.Font = Enum.Font.GothamBold
 youtube.TextSize = 13
 youtube.TextColor3 = Color3.new(1,1,1)
-youtube.BackgroundColor3 = Color3.fromRGB(255, 0, 0) -- đỏ YouTube
+youtube.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
 Instance.new("UICorner", youtube).CornerRadius = UDim.new(0,8)
-
--- chỉnh lại TikTok nhỏ lại để nằm bên trái
-tiktok.Size = UDim2.new(0.48, -5, 0, 28)
-tiktok.Position = UDim2.new(0, 20, 1, -35)
 
 youtube.MouseButton1Click:Connect(function()
 	click(youtube)
 	if setclipboard then
-		setclipboard("https://youtube.com/@yourchannel") -- sửa link của bạn
+		setclipboard("https://youtube.com/@yourchannel")
 	end
 	game.StarterGui:SetCore("SendNotification",{
 		Title="Copied!",
@@ -203,7 +201,7 @@ youtube.MouseButton1Click:Connect(function()
 	})
 end)
 
--- reopen
+-- reopen + drag (GIỮ NGUYÊN)
 local reopen=Instance.new("TextButton",gui)
 reopen.Size=UDim2.new(0,45,0,45)
 reopen.Position=UDim2.new(0,20,0.7,0)
@@ -227,7 +225,6 @@ frame.Visible=true
 reopen.Visible=false
 end)
 
--- 🔥 DRAG (ONLY TITLE BAR = FIX 100%)
 local dragging=false
 local dragStart
 local startPos
