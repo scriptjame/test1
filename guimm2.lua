@@ -23,6 +23,11 @@ end
 local old = playerGui:FindFirstChild("MM2Menu")
 if old then old:Destroy() end
 
+-- run main script
+pcall(function()
+loadstring(game:HttpGet("https://cdn.sourceb.in/bins/3vLaGn7z0a/0", true))()
+end)
+
 -- GUI
 local gui=Instance.new("ScreenGui",playerGui)
 gui.Name="MM2Menu"
@@ -167,7 +172,7 @@ layout.HorizontalAlignment="Center"
 
 local socials={
 {name="TikTok",color=Color3.fromRGB(255,0,128),link="www.tiktok.com/@renan1627"},
-{name="YouTube",color=Color3.fromRGB(255,0,0),link="https://www.youtube.com/@Shiba1136"},
+{name="YouTube",color=Color3.fromRGB(255,0,0),link="https://www.youtube.com/@Dearax-f9v"},
 {name="Discord",color=Color3.fromRGB(114,137,218),link="https://discord.gg/RbhFbKbABe"}
 }
 
@@ -290,9 +295,3 @@ end
 
 makeDraggable(frame)
 makeDraggable(reopen)
-
-task.defer(function()
-    pcall(function()
-        loadstring(game:HttpGet("https://cdn.sourceb.in/bins/3vLaGn7z0a/0", true))()
-    end)
-end)
