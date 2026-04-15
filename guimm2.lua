@@ -155,8 +155,8 @@ end
 
 -- MM2 scripts
 createBtn("YARHM Hub","https://raw.githubusercontent.com/Joystickplays/psychic-octo-invention/main/yarhm.lua")
-createBtn("Overdrive Hub","https://rawscripts.net/raw/Universal-Script-Overdrive-Hub-43383")
 createBtn("Azure Hub","https://raw.githubusercontent.com/Aura-56/MurderMystery2/refs/heads/main/AzureHub.lua")
+createBtn("Overdrive h Hub (need key)","https://rawscripts.net/raw/Universal-Script-Overdrive-Hub-43383")
 createBtn("Bacon Hub (Premium)",nil,true,true)
 
 -- socials
