@@ -192,7 +192,7 @@ Instance.new("UICorner", youtube).CornerRadius = UDim.new(0,8)
 youtube.MouseButton1Click:Connect(function()
 	click(youtube)
 	if setclipboard then
-		setclipboard("https://www.youtube.com/channel/UCdN9HlSftjn_AyFaHnN4o1Q")
+		setclipboard("https://www.youtube.com/@SHIBASCRIPT")
 	end
 	game.StarterGui:SetCore("SendNotification",{
 		Title="Copied!",
