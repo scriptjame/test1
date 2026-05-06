@@ -130,7 +130,7 @@ end
 
 game.StarterGui:SetCore("SendNotification",{
 Title="Copied!",
-Text="Follow my TikTok for updates!",
+Text="Follow my Youtube and TikTok for updates!",
 Duration=5
 })
 
