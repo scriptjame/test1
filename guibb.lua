@@ -25,7 +25,7 @@ if old then old:Destroy() end
 
 -- main script
 pcall(function()
-loadstring(game:HttpGet("https://pastefy.app/lXtua1cc/raw"))()
+
 end)
 
 -- GUI
