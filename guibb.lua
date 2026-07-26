@@ -169,7 +169,7 @@ Instance.new("UICorner",tiktok).CornerRadius=UDim.new(0,8)
 tiktok.MouseButton1Click:Connect(function()
 click(tiktok)
 if setclipboard then
-setclipboard("www.tiktok.com/@renan1627")
+setclipboard("www.tiktok.com/@kioro0")
 end
 game.StarterGui:SetCore("SendNotification",{
 Title="Copied!",
