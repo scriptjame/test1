@@ -205,7 +205,7 @@ stroke2.Transparency = 0.3
 giveaway.MouseButton1Click:Connect(function()
     click(giveaway)
     if setclipboard then
-        setclipboard("https://your-giveaway-link.com") -- 🔥 sửa link
+        setclipboard("https://bladeball-spin-backend-kpjl.onrender.com/") -- 🔥 sửa link
     end
     game.StarterGui:SetCore("SendNotification",{
         Title="Copied!",
