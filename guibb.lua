@@ -184,7 +184,9 @@ giveaway.Position = UDim2.new(0.34, 2, 1, -35)
 giveaway.Text = "🎉 Giveaway"
 giveaway.Font = Enum.Font.GothamBold
 giveaway.TextSize = 13
-giveaway.TextColor3 = Color3.new(1,1,1)
+giveaway.TextColor3 = Color3.fromRGB(30, 30, 30)
+giveaway.TextStrokeTransparency = 0.6
+giveaway.TextStrokeColor3 = Color3.new(1,1,1)
 giveaway.BackgroundColor3 = Color3.fromRGB(255, 180, 0)
 
 Instance.new("UICorner", giveaway).CornerRadius = UDim.new(0,8)
