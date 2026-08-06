@@ -145,20 +145,20 @@ end
 
 -- scripts
 createBtn("Makzinn Hub","https://raw.githubusercontent.com/MagoKazinn/Makzinn_hub/main/makzinn_Hub")
-createBtn("Levi Hub","https://levi-hub-x.vercel.app/Loader.lua")
+createBtn(" ","https")
 createBtn("Corolla Hub","https://raw.githubusercontent.com/7190000/Corolla-Hub/main/ch.lua")
 createBtn("Plutonium Hub","https://raw.githubusercontent.com/PawsThePaw/Plutonium.AA/main/Plutonium.Loader.lua")
 createBtn("Mur4exe Hub","https://gist.githubusercontent.com/Mur4exe/3f324715641be103e3ee2a8317765e13/raw/a9749a78feffaa7f535b8335454d9888aa8f530c/Blade_ball_modern_ui_v2.lua")
 createBtn("Vylera Hub","https://raw.githubusercontent.com/vylerascripts/vylera-scripts/main/vylerabladeball.lua")
-createBtn("Rixton Hub (snare hub - keyless)","https://rawscripts.net/raw/Universal-Script-Argon-X-Hub-138276")
+createBtn(" ","https:")
 
 createBtn("Allusive",nil,true,true)
 createBtn("UwU",nil,true,true)
 
 -- TikTok
 local tiktok=Instance.new("TextButton",frame)
-tiktok.Size=UDim2.new(0.48,-5,0,28)
-tiktok.Position=UDim2.new(0,20,1,-35)
+tiktok.Size = UDim2.new(0.32,-5,0,28)
+tiktok.Position = UDim2.new(0,10,1,-35)
 tiktok.Text="TikTok"
 tiktok.Font=Enum.Font.GothamBold
 tiktok.TextSize=13
@@ -177,11 +177,45 @@ Text="TikTok copied.",
 Duration=4
 })
 end)
+-- 🎉 Giveaway (NEW)
+local giveaway = Instance.new("TextButton", frame)
+giveaway.Size = UDim2.new(0.32, -5, 0, 28)
+giveaway.Position = UDim2.new(0.34, 2, 1, -35)
+giveaway.Text = "🎉 Giveaway"
+giveaway.Font = Enum.Font.GothamBold
+giveaway.TextSize = 13
+giveaway.TextColor3 = Color3.new(1,1,1)
+giveaway.BackgroundColor3 = Color3.fromRGB(255, 180, 0)
+
+Instance.new("UICorner", giveaway).CornerRadius = UDim.new(0,8)
+
+local g2 = Instance.new("UIGradient", giveaway)
+g2.Color = ColorSequence.new{
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 120, 0)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 220, 100))
+}
+
+local stroke2 = Instance.new("UIStroke", giveaway)
+stroke2.Color = Color3.fromRGB(255,255,255)
+stroke2.Thickness = 1.5
+stroke2.Transparency = 0.3
+
+giveaway.MouseButton1Click:Connect(function()
+    click(giveaway)
+    if setclipboard then
+        setclipboard("https://your-giveaway-link.com") -- 🔥 sửa link
+    end
+    game.StarterGui:SetCore("SendNotification",{
+        Title="Copied!",
+        Text="Giveaway link copied.",
+        Duration=4
+    })
+end)
 
 -- YouTube
 local youtube = Instance.new("TextButton", frame)
-youtube.Size = UDim2.new(0.48, -5, 0, 28)
-youtube.Position = UDim2.new(0.52, 5, 1, -35)
+youtube.Size = UDim2.new(0.32,-5,0,28)
+youtube.Position = UDim2.new(0.68,0,1,-35)
 youtube.Text = "YouTube"
 youtube.Font = Enum.Font.GothamBold
 youtube.TextSize = 13
