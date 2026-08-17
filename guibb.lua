@@ -117,12 +117,6 @@ local NoKeyScripts = {
     },
 
     {
-        Name = "Plutonium Hub",
-        Icon = "◆",
-        URL = "https://raw.githubusercontent.com/PawsThePaw/Plutonium.AA/main/Plutonium.Loader.lua"
-    },
-
-    {
         Name = "Mur4exe Hub",
         Icon = "✦",
         URL = "https://gist.githubusercontent.com/Mur4exe/3f324715641be103e3ee2a8317765e13/raw/a9749a78feffaa7f535b8335454d9888aa8f530c/Blade_ball_modern_ui_v2.lua"
@@ -150,9 +144,9 @@ local NoKeyScripts = {
 local NeedKeyScripts = {
 
     {
-        Name = "Your Script",
+        Name = "Test",
         Icon = "🔐",
-        URL = "https://pastebin.com/raw/7Fa0T52n"
+        URL = "https://pastebin.com/raw/"
     }
 
 }
@@ -811,7 +805,7 @@ local function createCard(data, index)
             if setclipboard then
 
                 setclipboard(
-                    "https://www.youtube.com/@Yungako45"
+                    "https://www.youtube.com/@Keaw-w7l"
                 )
 
             end
@@ -1201,7 +1195,7 @@ youtube.Activated:Connect(function()
     if setclipboard then
 
         setclipboard(
-            "https://www.youtube.com/@Yungako45"
+            "https://www.youtube.com/@Keaw-w7l"
         )
 
     end
