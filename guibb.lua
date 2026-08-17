@@ -1296,7 +1296,7 @@ reopen.BackgroundColor3 =
 
 reopen.BorderSizePixel = 0
 
-reopen.Text = "⚡"
+reopen.Text = "B"
 
 reopen.TextColor3 = TEXT
 
