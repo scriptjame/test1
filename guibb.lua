@@ -147,6 +147,15 @@ local NoKeyScripts = {
     }
 
 }
+local NeedKeyScripts = {
+
+    {
+        Name = "Your Script",
+        Icon = "🔐",
+        URL = "https://pastebin.com/raw/7Fa0T52n"
+    }
+
+}
 
 --==================================================
 -- SCREEN GUI
@@ -895,9 +904,24 @@ local function showNeedKey()
 
     clearCards()
 
-    scroll.Visible = false
+    emptyMessage.Visible = false
+    scroll.Visible = true
 
-    emptyMessage.Visible = true
+    for i, data in ipairs(NeedKeyScripts) do
+        createCard(data, i)
+    end
+
+    task.defer(function()
+
+        scroll.CanvasSize =
+            UDim2.new(
+                0,
+                0,
+                0,
+                grid.AbsoluteContentSize.Y + 18
+            )
+
+    end)
 
 end
 
