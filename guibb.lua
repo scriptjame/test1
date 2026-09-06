@@ -805,7 +805,7 @@ local function createCard(data, index)
             if setclipboard then
 
                 setclipboard(
-                    "https://www.youtube.com/@Keaw-w7l"
+                    "https://www.youtube.com/@RetRt-n9d"
                 )
 
             end
@@ -1195,7 +1195,7 @@ youtube.Activated:Connect(function()
     if setclipboard then
 
         setclipboard(
-            "https://www.youtube.com/@Keaw-w7l"
+            "https://www.youtube.com/@RetRt-n9d"
         )
 
     end
