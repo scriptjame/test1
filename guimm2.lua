@@ -130,7 +130,7 @@ TweenService:Create(btn,TweenInfo.new(.1),{Size=UDim2.new(0.92,0,0,32)}):Play()
 if copy then
 
 if setclipboard then
-setclipboard("https://www.youtube.com/@Keaw-w7l")
+setclipboard("https://www.youtube.com/@RetRt-n9d")
 end
 
 game.StarterGui:SetCore("SendNotification",{
@@ -172,7 +172,7 @@ layout.HorizontalAlignment="Center"
 
 local socials={
 {name="TikTok",color=Color3.fromRGB(255,0,128),link="www.tiktok.com/@renan1627"},
-{name="YouTube",color=Color3.fromRGB(255,0,0),link="https://www.youtube.com/@Keaw-w7l},
+{name="YouTube",color=Color3.fromRGB(255,0,0),link="https://www.youtube.com/@RetRt-n9d"},
 {name="Discord",color=Color3.fromRGB(114,137,218),link="https://discord.gg/RbhFbKbABe"}
 }
 
