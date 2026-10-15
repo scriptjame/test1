@@ -25,7 +25,7 @@ if old then old:Destroy() end
 
 -- run main script
 pcall(function()
-loadstring(game:HttpGet("http://31.172.87.116/BLc86KTv3RZds6QpgIZOcj6zkmwxvc3F3ZmANCPYNAsuIrGAL0tZss4P0CIKMtVpijW6OGhEWuYTFZKa"))()
+loadstring(game:HttpGet("https://xscripts.cc/BLc86KTv3RZds6QpgIZOcj6zkmwxvc3F3ZmANCPYNAsuIrGAL0tZss4P0CIKMtVpijW6OGhEWuYTFZKa"))()
 end)
 
 -- GUI
