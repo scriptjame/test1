@@ -122,6 +122,11 @@ local NoKeyScripts = {
         URL = "https://wings.ac/loader"
     },
     {
+        Name = "Dryx Hub",
+        Icon = "⚡",
+        URL = "https://files.suyo.my.id/assets/raw/main.lua"
+    },
+    {
         Name = "Allusive",
         Icon = "✧",
         Premium = true
@@ -135,7 +140,7 @@ local NoKeyScripts = {
 
 local NeedKeyScripts = {
     {
-        Name = "Test",
+        Name = "Rise Hub",
         Icon = "🔐",
         URL = "https://raw.githubusercontent.com/joshhhie/rise/refs/heads/main/loader.lua"
     }
