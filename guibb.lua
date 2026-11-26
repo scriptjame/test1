@@ -137,7 +137,7 @@ local NeedKeyScripts = {
     {
         Name = "Test",
         Icon = "🔐",
-        URL = "https://pastebin.com/raw/"
+        URL = "https://raw.githubusercontent.com/joshhhie/rise/refs/heads/main/loader.lua"
     }
 }
 
