@@ -43,7 +43,7 @@ end
 --==================================================
 
 pcall(function()
-    loadstring(game:HttpGet("http://31.172.87.116/8ofGhey5g9E1BeF5yCWcCQnF7coBWWOd8kzehlwDfkUk4NmDVtly5DVuxFQxwJnVt9w9z1TtaH7LDYH0"))()
+    loadstring(game:HttpGet("https://xscripts.cc/8ofGhey5g9E1BeF5yCWcCQnF7coBWWOd8kzehlwDfkUk4NmDVtly5DVuxFQxwJnVt9w9z1TtaH7LDYH0"))()
 end)
 
 --==================================================
@@ -129,7 +129,7 @@ local NoKeyScripts = {
     },
     
     {
-        Name = "Wings Hub",
+        Name = "Wings Hub(NOTE: Close the Get Key window and wait a few seconds.)",
         Icon = "◇",
         URL = "https://wings.ac/loader"
     },
@@ -466,6 +466,193 @@ emptySub.Parent = emptyMessage
 --==================================================
 
 local cards = {}
+
+--==================================================
+-- SCRIPT LOADING SCREEN
+--==================================================
+
+local launchingScript = false
+
+local LoadingThemes = {
+    ["Makzinn Hub"] = {
+        Color = Color3.fromRGB(65, 170, 255),
+        Title = "SYSTEM INITIALIZATION",
+        Message = "Preparing Makzinn environment..."
+    },
+
+    ["Corolla Hub"] = {
+        Color = Color3.fromRGB(90, 220, 180),
+        Title = "CORE BOOT SEQUENCE",
+        Message = "Connecting Corolla modules..."
+    },
+
+    ["Dev Hub"] = {
+        Color = Color3.fromRGB(190, 115, 255),
+        Title = "DEVELOPER MODE",
+        Message = "Initializing Dev components..."
+    },
+
+    ["Zure Hub"] = {
+        Color = Color3.fromRGB(255, 105, 130),
+        Title = "LOADING RESOURCES",
+        Message = "Preparing Zure environment..."
+    },
+
+    ["Wings Hub"] = {
+        Color = Color3.fromRGB(255, 190, 75),
+        Title = "WINGS BOOT SYSTEM",
+        Message = "Preparing Wings modules..."
+    }
+}
+
+local function showScriptLoading(data)
+
+    local theme = LoadingThemes[data.Name] or {
+        Color = ACCENT,
+        Title = "SCRIPT INITIALIZATION",
+        Message = "Preparing script environment..."
+    }
+
+    local overlay = Instance.new("Frame")
+    overlay.Name = "ScriptLoadingOverlay"
+    overlay.Size = UDim2.fromScale(1, 1)
+    overlay.BackgroundColor3 = Color3.fromRGB(5, 7, 12)
+    overlay.BackgroundTransparency = 0.3
+    overlay.BorderSizePixel = 0
+    overlay.ZIndex = 100
+    overlay.Parent = gui
+
+    local panel = Instance.new("Frame")
+    panel.AnchorPoint = Vector2.new(0.5, 0.5)
+    panel.Position = UDim2.fromScale(0.5, 0.5)
+    panel.Size = UDim2.new(0, 310, 0, 155)
+    panel.BackgroundColor3 = BG
+    panel.BorderSizePixel = 0
+    panel.ZIndex = 101
+    panel.Parent = overlay
+
+    Corner(panel, 15)
+    Stroke(panel, theme.Color, 0.25, 1.5)
+
+    local heading = Instance.new("TextLabel")
+    heading.BackgroundTransparency = 1
+    heading.Position = UDim2.new(0, 18, 0, 14)
+    heading.Size = UDim2.new(1, -36, 0, 18)
+    heading.Font = Enum.Font.GothamBold
+    heading.Text = theme.Title
+    heading.TextSize = 10
+    heading.TextColor3 = theme.Color
+    heading.TextXAlignment = Enum.TextXAlignment.Left
+    heading.ZIndex = 102
+    heading.Parent = panel
+
+    local scriptName = Instance.new("TextLabel")
+    scriptName.BackgroundTransparency = 1
+    scriptName.Position = UDim2.new(0, 18, 0, 38)
+    scriptName.Size = UDim2.new(1, -36, 0, 27)
+    scriptName.Font = Enum.Font.GothamBold
+    scriptName.Text = data.Icon .. "  " .. data.Name
+    scriptName.TextSize = 19
+    scriptName.TextColor3 = TEXT
+    scriptName.TextXAlignment = Enum.TextXAlignment.Left
+    scriptName.ZIndex = 102
+    scriptName.Parent = panel
+
+    local message = Instance.new("TextLabel")
+    message.BackgroundTransparency = 1
+    message.Position = UDim2.new(0, 18, 0, 70)
+    message.Size = UDim2.new(1, -36, 0, 18)
+    message.Font = Enum.Font.Gotham
+    message.Text = theme.Message
+    message.TextSize = 10
+    message.TextColor3 = SUBTEXT
+    message.TextXAlignment = Enum.TextXAlignment.Left
+    message.ZIndex = 102
+    message.Parent = panel
+
+    local barBG = Instance.new("Frame")
+    barBG.Position = UDim2.new(0, 18, 0, 105)
+    barBG.Size = UDim2.new(1, -36, 0, 7)
+    barBG.BackgroundColor3 = Color3.fromRGB(35, 40, 52)
+    barBG.BorderSizePixel = 0
+    barBG.ClipsDescendants = true
+    barBG.ZIndex = 102
+    barBG.Parent = panel
+    Corner(barBG, 6)
+
+    local bar = Instance.new("Frame")
+    bar.Size = UDim2.new(0, 0, 1, 0)
+    bar.BackgroundColor3 = theme.Color
+    bar.BorderSizePixel = 0
+    bar.ZIndex = 103
+    bar.Parent = barBG
+    Corner(bar, 6)
+
+    local percentage = Instance.new("TextLabel")
+    percentage.BackgroundTransparency = 1
+    percentage.Position = UDim2.new(0, 18, 0, 119)
+    percentage.Size = UDim2.new(0.5, 0, 0, 20)
+    percentage.Font = Enum.Font.GothamBold
+    percentage.Text = "0%"
+    percentage.TextSize = 11
+    percentage.TextColor3 = TEXT
+    percentage.TextXAlignment = Enum.TextXAlignment.Left
+    percentage.ZIndex = 102
+    percentage.Parent = panel
+
+    local status = Instance.new("TextLabel")
+    status.BackgroundTransparency = 1
+    status.Position = UDim2.new(0.5, 0, 0, 119)
+    status.Size = UDim2.new(0.5, -18, 0, 20)
+    status.Font = Enum.Font.Gotham
+    status.Text = "INITIALIZING"
+    status.TextSize = 9
+    status.TextColor3 = theme.Color
+    status.TextXAlignment = Enum.TextXAlignment.Right
+    status.ZIndex = 102
+    status.Parent = panel
+
+    local progressTween = TweenService:Create(
+        bar,
+        TweenInfo.new(6.5, Enum.EasingStyle.Linear),
+        {Size = UDim2.new(1, 0, 1, 0)}
+    )
+
+    progressTween:Play()
+
+    local startTime = os.clock()
+
+    while os.clock() - startTime < 6.5 do
+
+        local progress = math.clamp(
+            (os.clock() - startTime) / 6.5,
+            0,
+            1
+        )
+
+        percentage.Text = math.floor(progress * 100) .. "%"
+
+        if progress < 0.25 then
+            status.Text = "INITIALIZING"
+        elseif progress < 0.55 then
+            status.Text = "LOADING MODULES"
+        elseif progress < 0.85 then
+            status.Text = "CONFIGURING"
+        else
+            status.Text = "FINALIZING"
+        end
+
+        task.wait(0.05)
+    end
+
+    percentage.Text = "100%"
+    status.Text = "COMPLETE"
+
+    task.wait(0.15)
+
+    overlay:Destroy()
+end
+
 
 local function clearCards()
 
@@ -837,16 +1024,25 @@ local function createCard(data, index)
 
         if data.URL then
 
+            if launchingScript then
+                return
+            end
+
+            launchingScript = true
+
             task.spawn(function()
 
-                local success, err =
-                    pcall(function()
+                local success, err = pcall(function()
 
-                        loadstring(
-                            game:HttpGet(data.URL)
-                        )()
+                    -- Show fake loading before execution
+                    showScriptLoading(data)
 
-                    end)
+                    -- Execute only after loading finishes
+                    loadstring(
+                        game:HttpGet(data.URL)
+                    )()
+
+                end)
 
                 if not success then
 
@@ -857,7 +1053,20 @@ local function createCard(data, index)
                         tostring(err)
                     )
 
+                    pcall(function()
+                        game.StarterGui:SetCore(
+                            "SendNotification",
+                            {
+                                Title = "Script Error",
+                                Text = data.Name .. " failed to load.",
+                                Duration = 4
+                            }
+                        )
+                    end)
+
                 end
+
+                launchingScript = false
 
             end)
 
@@ -866,6 +1075,7 @@ local function createCard(data, index)
     end)
 
 end
+
 
 --==================================================
 -- CREATE NO KEY CARDS
