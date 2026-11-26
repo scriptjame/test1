@@ -117,15 +117,21 @@ local NoKeyScripts = {
     },
 
     {
-        Name = "Mur4exe Hub",
+        Name = "Dev Hub",
         Icon = "✦",
-        URL = "https://gist.githubusercontent.com/Mur4exe/3f324715641be103e3ee2a8317765e13/raw/a9749a78feffaa7f535b8335454d9888aa8f530c/Blade_ball_modern_ui_v2.lua"
+        URL = "https://scriptblox.com/raw/Universal-Script-Dev-script-private-223032"
     },
 
     {
-        Name = "Vylera Hub",
+        Name = "Zure Hub",
         Icon = "◇",
-        URL = "https://raw.githubusercontent.com/vylerascripts/vylera-scripts/main/vylerabladeball.lua"
+        URL = "https://scriptblox.com/raw/SALE-PAINT-OR-DIE!-Zure-Hub-Op-Blade-Ball-222915"
+    },
+    
+    {
+        Name = "Wings Hub",
+        Icon = "◇",
+        URL = "https://wings.ac/loader"
     },
 
     {
