@@ -1,3 +1,4 @@
+
 -- ⚔️ Blade Ball GUI PRO
 -- No Key / Need Key / Responsive / Drag / Minimize
 
@@ -33,6 +34,11 @@ end
 local old = playerGui:FindFirstChild("BladeBallMenu")
 if old then
     old:Destroy()
+end
+
+local oldLoading = playerGui:FindFirstChild("BladeBallLoading")
+if oldLoading then
+    oldLoading:Destroy()
 end
 
 --==================================================
@@ -119,12 +125,14 @@ local NoKeyScripts = {
     {
         Name = "Wings Hub(NOTE: Close the Get Key window and wait a few seconds.)",
         Icon = "◇",
-        URL = "https://wings.ac/loader"
+        URL = "https://wings.ac/loader",
+        LoadDuration = 14
     },
     {
         Name = "Dryx Hub",
         Icon = "⚡",
-        URL = "https://files.suyo.my.id/assets/raw/main.lua"
+        URL = "https://files.suyo.my.id/assets/raw/main.lua",
+        LoadDuration = 13
     },
     {
         Name = "Allusive",
@@ -398,7 +406,8 @@ local LoadingThemes = {
     ["Corolla Hub"] = Color3.fromRGB(90, 215, 180),
     ["Dev Hub"] = Color3.fromRGB(185, 125, 255),
     ["Zure Hub"] = Color3.fromRGB(255, 110, 140),
-    ["Wings Hub"] = Color3.fromRGB(255, 190, 85)
+    ["Wings Hub"] = Color3.fromRGB(255, 190, 85),
+    ["Dryx Hub"] = Color3.fromRGB(110, 210, 255)
 }
 
 local LoadingMessages = {
@@ -420,7 +429,6 @@ local function showScriptLoading(data)
         end
     end
 
-    -- Separate ScreenGui keeps the loading screen above the menu.
     local loadingGui = Instance.new("ScreenGui")
     loadingGui.Name = "BladeBallLoading"
     loadingGui.IgnoreGuiInset = true
@@ -433,9 +441,8 @@ local function showScriptLoading(data)
     local overlay = Instance.new("Frame")
     overlay.Size = UDim2.fromScale(1, 1)
     overlay.BackgroundColor3 = Color3.fromRGB(4, 7, 13)
-    overlay.BackgroundTransparency = 0.28
-    overlay.BorderSizePixel = 0
     overlay.BackgroundTransparency = 1
+    overlay.BorderSizePixel = 0
     overlay.Parent = loadingGui
 
     -- Glass panel
@@ -445,7 +452,7 @@ local function showScriptLoading(data)
     panel.Position = UDim2.fromScale(0.5, 0.5)
     panel.Size = UDim2.new(0, 390, 0, 190)
     panel.BackgroundColor3 = Color3.fromRGB(24, 29, 40)
-    panel.BackgroundTransparency = 0.16
+    panel.BackgroundTransparency = 1
     panel.BorderSizePixel = 0
     panel.ClipsDescendants = true
     panel.Parent = overlay
@@ -470,7 +477,7 @@ local function showScriptLoading(data)
     accentLine.Parent = panel
     Corner(accentLine, 3)
 
-    -- Small heading
+    -- Heading
     local heading = Instance.new("TextLabel")
     heading.BackgroundTransparency = 1
     heading.Position = UDim2.new(0, 24, 0, 19)
@@ -495,7 +502,7 @@ local function showScriptLoading(data)
     scriptName.TextTruncate = Enum.TextTruncate.AtEnd
     scriptName.Parent = panel
 
-    -- Single animated status line
+    -- Status line
     local status = Instance.new("TextLabel")
     status.BackgroundTransparency = 1
     status.Position = UDim2.new(0, 25, 0, 91)
@@ -555,34 +562,40 @@ local function showScriptLoading(data)
         BackgroundTransparency = 0.28
     }):Play()
 
-    panel.BackgroundTransparency = 1
     Tween(panel, 0.3, {
         BackgroundTransparency = 0.16
     }):Play()
 
-    -- Lightweight progress and typewriter animation
-    local duration = 9
+    -- Duration: default 9 seconds.
+    -- Wings Hub: 14 seconds.
+    -- Dryx Hub: 13 seconds.
+    local duration = tonumber(data.LoadDuration) or 9
+
     local startedAt = os.clock()
     local lastMessage = 0
     local lastPercent = -1
 
     local messageDuration = duration / #LoadingMessages
-    local typeSpeed = 0.035
 
+    -- Smooth progress animation
     while true do
         local elapsed = os.clock() - startedAt
-        local progress = math.clamp(elapsed / duration, 0, 1)
+        local rawProgress = math.clamp(elapsed / duration, 0, 1)
 
-        -- Update progress only when percentage changes
+        -- Smooth progression without sudden jumps.
+        local progress = rawProgress
+
         local percent = math.floor(progress * 100)
 
         if percent ~= lastPercent then
             lastPercent = percent
             percentage.Text = tostring(percent) .. "%"
-            bar.Size = UDim2.new(progress, 0, 1, 0)
         end
 
-        -- Change one short status line at a time
+        -- Update bar continuously for smoother movement.
+        bar.Size = UDim2.new(progress, 0, 1, 0)
+
+        -- Status messages
         local messageIndex = math.min(
             #LoadingMessages,
             math.floor(elapsed / messageDuration) + 1
@@ -598,11 +611,11 @@ local function showScriptLoading(data)
             }):Play()
         end
 
-        if progress >= 1 then
+        if rawProgress >= 1 then
             break
         end
 
-        task.wait(0.1)
+        task.wait(0.05)
     end
 
     percentage.Text = "100%"
@@ -1029,8 +1042,6 @@ tiktok.Activated:Connect(function()
         Duration = 4
     })
 end)
-
-
 
 --==================================================
 -- YOUTUBE
