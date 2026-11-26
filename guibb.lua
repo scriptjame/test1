@@ -129,12 +129,6 @@ local NoKeyScripts = {
         LoadDuration = 14
     },
     {
-        Name = "Dryx Hub",
-        Icon = "⚡",
-        URL = "https://files.suyo.my.id/assets/raw/main.lua",
-        LoadDuration = 13
-    },
-    {
         Name = "Allusive",
         Icon = "✧",
         Premium = true
