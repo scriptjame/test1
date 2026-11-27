@@ -389,7 +389,8 @@ emptySub.Parent = emptyMessage
 
 local cards = {}
 
--- Keep the selected script locked for this player session, even if this GUI is re-executed.
+-- Session-only exclusion rules. Normal hubs remain usable with each other;
+-- Makzinn Hub is the only mutually exclusive hub.
 local sessionEnvironment = _G
 pcall(function()
     if type(getgenv) == "function" then
@@ -397,32 +398,41 @@ pcall(function()
     end
 end)
 
-local sessionState = sessionEnvironment.__BladeBallScriptSessionLock
+local sessionState = sessionEnvironment.__BladeBallMakzinnExclusionState
 if type(sessionState) ~= "table" or sessionState.Player ~= player then
     sessionState = {
         Player = player,
-        ActiveScriptName = nil
+        MakzinnActive = false,
+        MakzinnBlocked = false
     }
-    sessionEnvironment.__BladeBallScriptSessionLock = sessionState
+    sessionEnvironment.__BladeBallMakzinnExclusionState = sessionState
 end
 
-local function getLockedMessage(clickedName)
-    local activeName = sessionState.ActiveScriptName
-
-    if activeName == "Makzinn Hub" then
-        return "Makzinn Hub is active. Rejoin to use another script."
-    elseif clickedName == "Makzinn Hub" then
-        return "Another script is active. Rejoin to use Makzinn Hub."
+local function isScriptLocked(data)
+    if not data or not data.URL then
+        return false
     end
 
-    return "Another script is active. Rejoin to switch scripts."
+    if sessionState.MakzinnActive then
+        return data.Name ~= "Makzinn Hub"
+    end
+
+    return data.Name == "Makzinn Hub" and sessionState.MakzinnBlocked
 end
 
-local function showLockedNotice(clickedName)
+local function showLockedNotice(data)
+    local message
+
+    if data.Name == "Makzinn Hub" then
+        message = "Makzinn Hub is disabled while another hub is running. Rejoin to use it."
+    else
+        message = "Cannot run: Makzinn Hub may conflict with other hubs. Rejoin first."
+    end
+
     pcall(function()
         game.StarterGui:SetCore("SendNotification", {
-            Title = "Script Locked",
-            Text = getLockedMessage(clickedName),
+            Title = "Script Unavailable",
+            Text = message,
             Duration = 4
         })
     end)
@@ -444,9 +454,11 @@ local LoadingThemes = {
 }
 
 local LoadingMessages = {
-    "Preparing script...",
-    "Loading components...",
-    "Starting script..."
+    "Preparing the script environment",
+    "Loading required components",
+    "Initializing interface modules",
+    "Checking runtime compatibility",
+    "Finalizing your session"
 }
 
 local function showScriptLoading(data)
@@ -533,15 +545,15 @@ local function showScriptLoading(data)
     scriptName.TextTruncate = Enum.TextTruncate.AtEnd
     scriptName.Parent = panel
 
-    -- Makzinn-only warning; other scripts use the normal loading status only.
+    -- Only Makzinn Hub needs a special compatibility warning.
     if data.Name == "Makzinn Hub" then
         local warning = Instance.new("TextLabel")
-        warning.Name = "MakzinnWarning"
+        warning.Name = "MakzinnCompatibilityWarning"
         warning.BackgroundTransparency = 1
         warning.Position = UDim2.new(0, 25, 0, 76)
-        warning.Size = UDim2.new(1, -50, 0, 16)
+        warning.Size = UDim2.new(1, -50, 0, 14)
         warning.Font = Enum.Font.GothamMedium
-        warning.Text = "Warning: Rejoin to switch scripts."
+        warning.Text = "Makzinn Hub may conflict with other hubs. Use it alone."
         warning.TextSize = 9
         warning.TextColor3 = Color3.fromRGB(255, 190, 110)
         warning.TextXAlignment = Enum.TextXAlignment.Left
@@ -552,7 +564,7 @@ local function showScriptLoading(data)
     -- Status line
     local status = Instance.new("TextLabel")
     status.BackgroundTransparency = 1
-    status.Position = UDim2.new(0, 25, 0, 98)
+    status.Position = UDim2.new(0, 25, 0, 91)
     status.Size = UDim2.new(1, -50, 0, 20)
     status.Font = Enum.Font.Gotham
     status.Text = ""
@@ -701,30 +713,6 @@ local function clearCards()
     table.clear(cards)
 end
 
-local function updateScriptLockVisuals()
-    local activeName = sessionState.ActiveScriptName
-
-    for _, item in ipairs(cards) do
-        local data = item.Data
-        if data and data.URL then
-            local isActive = activeName == nil or data.Name == activeName
-            local card = item.Button
-            local icon = item.Icon
-            local name = item.Name
-            local arrow = item.Arrow
-
-            card.BackgroundColor3 = isActive and CARD or Color3.fromRGB(10, 12, 17)
-            card.BackgroundTransparency = isActive and 0 or 0.28
-            item.Stroke.Transparency = isActive and 0.78 or 0.92
-            item.Stroke.Color = isActive and Color3.fromRGB(70, 78, 98) or Color3.fromRGB(35, 39, 48)
-            icon.TextColor3 = isActive and TEXT or Color3.fromRGB(75, 79, 88)
-            name.TextColor3 = isActive and TEXT or Color3.fromRGB(82, 87, 98)
-            arrow.TextColor3 = isActive and SUBTEXT or Color3.fromRGB(65, 70, 80)
-            item.IconBox.BackgroundColor3 = isActive and ICON_BG or Color3.fromRGB(15, 17, 22)
-        end
-    end
-end
-
 --==================================================
 -- CREATE CARD
 --==================================================
@@ -844,10 +832,48 @@ local function createCard(data, index)
 
     table.insert(cards, cardData)
 
+    local function updateScriptLockVisuals()
+        for _, item in ipairs(cards) do
+            local itemData = item.Data
+            if itemData and itemData.URL then
+                local locked = isScriptLocked(itemData)
+                local isMakzinnActive = sessionState.MakzinnActive
+                    and itemData.Name == "Makzinn Hub"
+
+                item.Button.BackgroundColor3 = locked
+                    and Color3.fromRGB(10, 12, 17)
+                    or CARD
+                item.Button.BackgroundTransparency = locked and 0.28 or 0
+                item.Stroke.Transparency = locked and 0.92 or 0.78
+                item.Stroke.Color = locked
+                    and Color3.fromRGB(35, 39, 48)
+                    or Color3.fromRGB(70, 78, 98)
+                item.Icon.TextColor3 = locked
+                    and Color3.fromRGB(75, 79, 88)
+                    or TEXT
+                item.Name.TextColor3 = locked
+                    and Color3.fromRGB(82, 87, 98)
+                    or TEXT
+                item.Arrow.TextColor3 = locked
+                    and Color3.fromRGB(65, 70, 80)
+                    or SUBTEXT
+                item.IconBox.BackgroundColor3 = locked
+                    and Color3.fromRGB(15, 17, 22)
+                    or ICON_BG
+
+                if isMakzinnActive then
+                    item.Button.BackgroundColor3 = CARD
+                    item.Button.BackgroundTransparency = 0
+                end
+            end
+        end
+    end
+
+    updateScriptLockVisuals()
+
     -- HOVER
     card.MouseEnter:Connect(function()
-        if data.URL and sessionState.ActiveScriptName
-            and sessionState.ActiveScriptName ~= data.Name then
+        if isScriptLocked(data) then
             return
         end
 
@@ -877,8 +903,7 @@ local function createCard(data, index)
     end)
 
     card.MouseLeave:Connect(function()
-        if data.URL and sessionState.ActiveScriptName
-            and sessionState.ActiveScriptName ~= data.Name then
+        if isScriptLocked(data) then
             updateScriptLockVisuals()
             return
         end
@@ -909,10 +934,21 @@ local function createCard(data, index)
     -- CLICK
     card.Activated:Connect(function()
 
-        if data.URL and sessionState.ActiveScriptName
-            and sessionState.ActiveScriptName ~= data.Name then
+        if data.URL and isScriptLocked(data) then
             click(card)
-            showLockedNotice(data.Name)
+            showLockedNotice(data)
+            return
+        end
+
+        if data.URL and data.Name == "Makzinn Hub" and sessionState.MakzinnActive then
+            click(card)
+            pcall(function()
+                game.StarterGui:SetCore("SendNotification", {
+                    Title = "Makzinn Hub",
+                    Text = "Makzinn Hub is already selected. Rejoin to reset.",
+                    Duration = 4
+                })
+            end)
             return
         end
 
@@ -962,9 +998,12 @@ local function createCard(data, index)
         -- NORMAL SCRIPT
         if data.URL then
 
-            -- Lock every other actual script button as soon as one is selected.
-            if not sessionState.ActiveScriptName then
-                sessionState.ActiveScriptName = data.Name
+            if data.Name == "Makzinn Hub" then
+                sessionState.MakzinnActive = true
+                sessionState.MakzinnBlocked = false
+            else
+                -- Any regular hub disables Makzinn only; other regular hubs stay usable.
+                sessionState.MakzinnBlocked = true
             end
             updateScriptLockVisuals()
             launchingScript = true
@@ -1016,7 +1055,6 @@ local function showNoKey()
     for i, data in ipairs(NoKeyScripts) do
         createCard(data, i)
     end
-    updateScriptLockVisuals()
 
     task.defer(function()
         scroll.CanvasSize = UDim2.new(
@@ -1039,7 +1077,6 @@ local function showNeedKey()
     for i, data in ipairs(NeedKeyScripts) do
         createCard(data, i)
     end
-    updateScriptLockVisuals()
 
     task.defer(function()
         scroll.CanvasSize = UDim2.new(
