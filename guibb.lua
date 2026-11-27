@@ -103,11 +103,6 @@ end
 
 local NoKeyScripts = {
     {
-        Name = "Makzinn Hub",
-        Icon = "⚡",
-        URL = "https://raw.githubusercontent.com/MagoKazinn/Makzinn_hub/main/makzinn_Hub"
-    },
-    {
         Name = "Corolla Hub",
         Icon = "◈",
         URL = "https://raw.githubusercontent.com/7190000/Corolla-Hub/main/ch.lua"
@@ -127,6 +122,11 @@ local NoKeyScripts = {
         Icon = "◇",
         URL = "https://wings.ac/loader",
         LoadDuration = 14
+    },
+    {
+        Name = "Makzinn Hub",
+        Icon = "⚡",
+        URL = "https://raw.githubusercontent.com/MagoKazinn/Makzinn_hub/main/makzinn_Hub"
     },
     {
         Name = "Allusive",
@@ -389,6 +389,45 @@ emptySub.Parent = emptyMessage
 
 local cards = {}
 
+-- Keep the selected script locked for this player session, even if this GUI is re-executed.
+local sessionEnvironment = _G
+pcall(function()
+    if type(getgenv) == "function" then
+        sessionEnvironment = getgenv()
+    end
+end)
+
+local sessionState = sessionEnvironment.__BladeBallScriptSessionLock
+if type(sessionState) ~= "table" or sessionState.Player ~= player then
+    sessionState = {
+        Player = player,
+        ActiveScriptName = nil
+    }
+    sessionEnvironment.__BladeBallScriptSessionLock = sessionState
+end
+
+local function getLockedMessage(clickedName)
+    local activeName = sessionState.ActiveScriptName
+
+    if activeName == "Makzinn Hub" then
+        return "Makzinn Hub is active. Rejoin to use another script."
+    elseif clickedName == "Makzinn Hub" then
+        return "Another script is active. Rejoin to use Makzinn Hub."
+    end
+
+    return "Another script is active. Rejoin to switch scripts."
+end
+
+local function showLockedNotice(clickedName)
+    pcall(function()
+        game.StarterGui:SetCore("SendNotification", {
+            Title = "Script Locked",
+            Text = getLockedMessage(clickedName),
+            Duration = 4
+        })
+    end)
+end
+
 --==================================================
 -- SCRIPT LOADING SCREEN
 --==================================================
@@ -405,11 +444,9 @@ local LoadingThemes = {
 }
 
 local LoadingMessages = {
-    "Preparing the script environment",
-    "Loading required components",
-    "Initializing interface modules",
-    "Checking runtime compatibility",
-    "Finalizing your session"
+    "Preparing script...",
+    "Loading components...",
+    "Starting script..."
 }
 
 local function showScriptLoading(data)
@@ -496,10 +533,26 @@ local function showScriptLoading(data)
     scriptName.TextTruncate = Enum.TextTruncate.AtEnd
     scriptName.Parent = panel
 
+    -- Makzinn-only warning; other scripts use the normal loading status only.
+    if data.Name == "Makzinn Hub" then
+        local warning = Instance.new("TextLabel")
+        warning.Name = "MakzinnWarning"
+        warning.BackgroundTransparency = 1
+        warning.Position = UDim2.new(0, 25, 0, 76)
+        warning.Size = UDim2.new(1, -50, 0, 16)
+        warning.Font = Enum.Font.GothamMedium
+        warning.Text = "Warning: Rejoin to switch scripts."
+        warning.TextSize = 9
+        warning.TextColor3 = Color3.fromRGB(255, 190, 110)
+        warning.TextXAlignment = Enum.TextXAlignment.Left
+        warning.TextTruncate = Enum.TextTruncate.AtEnd
+        warning.Parent = panel
+    end
+
     -- Status line
     local status = Instance.new("TextLabel")
     status.BackgroundTransparency = 1
-    status.Position = UDim2.new(0, 25, 0, 91)
+    status.Position = UDim2.new(0, 25, 0, 98)
     status.Size = UDim2.new(1, -50, 0, 20)
     status.Font = Enum.Font.Gotham
     status.Text = ""
@@ -648,6 +701,30 @@ local function clearCards()
     table.clear(cards)
 end
 
+local function updateScriptLockVisuals()
+    local activeName = sessionState.ActiveScriptName
+
+    for _, item in ipairs(cards) do
+        local data = item.Data
+        if data and data.URL then
+            local isActive = activeName == nil or data.Name == activeName
+            local card = item.Button
+            local icon = item.Icon
+            local name = item.Name
+            local arrow = item.Arrow
+
+            card.BackgroundColor3 = isActive and CARD or Color3.fromRGB(10, 12, 17)
+            card.BackgroundTransparency = isActive and 0 or 0.28
+            item.Stroke.Transparency = isActive and 0.78 or 0.92
+            item.Stroke.Color = isActive and Color3.fromRGB(70, 78, 98) or Color3.fromRGB(35, 39, 48)
+            icon.TextColor3 = isActive and TEXT or Color3.fromRGB(75, 79, 88)
+            name.TextColor3 = isActive and TEXT or Color3.fromRGB(82, 87, 98)
+            arrow.TextColor3 = isActive and SUBTEXT or Color3.fromRGB(65, 70, 80)
+            item.IconBox.BackgroundColor3 = isActive and ICON_BG or Color3.fromRGB(15, 17, 22)
+        end
+    end
+end
+
 --==================================================
 -- CREATE CARD
 --==================================================
@@ -760,13 +837,20 @@ local function createCard(data, index)
         Data = data,
         Stroke = cardStroke,
         Arrow = arrow,
-        IconBox = iconBox
+        IconBox = iconBox,
+        Icon = icon,
+        Name = name
     }
 
     table.insert(cards, cardData)
 
     -- HOVER
     card.MouseEnter:Connect(function()
+        if data.URL and sessionState.ActiveScriptName
+            and sessionState.ActiveScriptName ~= data.Name then
+            return
+        end
+
         Tween(card, .13, {
             BackgroundColor3 = data.Premium
                 and Color3.fromRGB(48, 34, 62)
@@ -793,6 +877,12 @@ local function createCard(data, index)
     end)
 
     card.MouseLeave:Connect(function()
+        if data.URL and sessionState.ActiveScriptName
+            and sessionState.ActiveScriptName ~= data.Name then
+            updateScriptLockVisuals()
+            return
+        end
+
         Tween(card, .13, {
             BackgroundColor3 = data.Premium
                 and Color3.fromRGB(30, 26, 42)
@@ -818,6 +908,13 @@ local function createCard(data, index)
 
     -- CLICK
     card.Activated:Connect(function()
+
+        if data.URL and sessionState.ActiveScriptName
+            and sessionState.ActiveScriptName ~= data.Name then
+            click(card)
+            showLockedNotice(data.Name)
+            return
+        end
 
         if launchingScript then
             return
@@ -865,6 +962,11 @@ local function createCard(data, index)
         -- NORMAL SCRIPT
         if data.URL then
 
+            -- Lock every other actual script button as soon as one is selected.
+            if not sessionState.ActiveScriptName then
+                sessionState.ActiveScriptName = data.Name
+            end
+            updateScriptLockVisuals()
             launchingScript = true
 
             task.spawn(function()
@@ -914,6 +1016,7 @@ local function showNoKey()
     for i, data in ipairs(NoKeyScripts) do
         createCard(data, i)
     end
+    updateScriptLockVisuals()
 
     task.defer(function()
         scroll.CanvasSize = UDim2.new(
@@ -936,6 +1039,7 @@ local function showNeedKey()
     for i, data in ipairs(NeedKeyScripts) do
         createCard(data, i)
     end
+    updateScriptLockVisuals()
 
     task.defer(function()
         scroll.CanvasSize = UDim2.new(
